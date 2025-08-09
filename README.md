@@ -24,32 +24,49 @@ The learning structure follows a tree pattern:
 - Node.js (v14 or higher)
 - npm or yarn
 - A Supabase account
+- A Google AI (Gemini) API key
 
 ### Installation
 
-1. **Install dependencies**:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Developerr86/Grasphoffer.git
+   cd Grasphoffer
+   ```
+
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Set up Supabase** (Follow detailed instructions in `SUPABASE_SETUP.md`):
-   - Create a new Supabase project
-   - Run the SQL migration from `supabase/migrations/001_initial_schema.sql`
-   - Get your project URL and anon key
-
-3. **Configure environment variables**:
-   - Update `.env` with your Supabase credentials:
+3. **Set up environment variables**:
+   - Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+   - Update `.env` with your actual credentials:
    ```bash
    REACT_APP_SUPABASE_URL=your-supabase-project-url
    REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
+   REACT_APP_GEMINI_API_KEY=your-gemini-api-key
    ```
 
-4. **Start the development server**:
+4. **Set up Supabase** (Follow detailed instructions in `SUPABASE_SETUP.md`):
+   - Create a new Supabase project
+   - Run the SQL migration from `supabase/migrations/001_initial_schema.sql`
+   - Get your project URL and anon key from the Supabase dashboard
+
+5. **Get Gemini API Key**:
+   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Create a new API key
+   - Add it to your `.env` file
+
+6. **Start the development server**:
    ```bash
    npm start
    ```
 
-5. **Open your browser** and navigate to `http://localhost:3000`
+7. **Open your browser** and navigate to `http://localhost:3000`
 
 ## 📁 Project Structure
 
@@ -138,16 +155,39 @@ Next components to build:
 
 - **Frontend**: React.js with hooks
 - **Backend**: Supabase (PostgreSQL, Auth)
+- **AI Integration**: Google Gemini AI API
 - **Styling**: CSS3 with modern features
 - **State Management**: React Context API
 - **Authentication**: Supabase Auth
 
 ## 🐛 Troubleshooting
 
-- **Supabase Connection Error**: Check environment variables
-- **Email Not Received**: Check spam folder
-- **Build Errors**: Run `npm install`
-- **Styling Issues**: Clear browser cache
+- **Supabase Connection Error**: Check environment variables in `.env`
+- **Gemini AI Error**: Verify your API key is valid and has quota
+- **Email Not Received**: Check spam folder for verification emails
+- **Build Errors**: Run `npm install` to ensure all dependencies are installed
+- **Styling Issues**: Clear browser cache and hard refresh
+- **Environment Variables**: Make sure `.env` file is in the root directory and not committed to git
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Supabase](https://supabase.com/) for the backend infrastructure
+- [Google Gemini AI](https://ai.google.dev/) for AI-powered learning content
+- [React](https://reactjs.org/) for the frontend framework
 
 ---
 
