@@ -1,0 +1,462 @@
+/* Learning Session Component Styles */
+.learning-session-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header Navigation */
+.learning-session-container::before {
+  content: '';
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+.learning-session-container::after {
+  content: '';
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+/* Navigation Icons */
+.nav-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.nav-profile {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Title */
+.title {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 3rem;
+  font-weight: 300;
+  margin: 80px 0 60px 0;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Topic Form */
+.topic-form {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 700px;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.topic-input {
+  width: 100%;
+  padding: 18px 60px 18px 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.topic-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.topic-input:focus {
+  border-color: #4CAF50;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.submit-button {
+  position: absolute;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Prerequisites Section */
+.prerequisites-section {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.prerequisites-section h2 {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* Prerequisites Container */
+.prerequisites-list {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px 25px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  min-height: 200px;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+/* Prerequisite Items */
+.prerequisite-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  padding: 12px 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  user-select: none;
+  display: inline-block;
+}
+
+.prerequisite-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.prerequisite-item.selected {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: #4CAF50;
+  color: #ffffff;
+}
+
+.prerequisite-item.selected:hover {
+  background: rgba(76, 175, 80, 0.4);
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.action-button {
+  padding: 12px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.action-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.action-button:first-child {
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+.action-button:first-child:hover {
+  background: rgba(76, 175, 80, 0.2);
+}
+
+/* Instructions */
+.instructions {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(76, 175, 80, 0.3);
+  border-top: 3px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Learning Phase */
+.learning-phase {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.learning-phase h2 {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.topics-to-learn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px 25px;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  min-height: 120px;
+  align-items: center;
+}
+
+.learning-topic {
+  background: rgba(255, 76, 76, 0.2);
+  border: 2px solid #ff4c4c;
+  border-radius: 25px;
+  padding: 12px 20px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.topics-to-learn p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Completion Section */
+.completion-section {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.completion-message {
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid #4CAF50;
+  border-radius: 20px;
+  padding: 40px 30px;
+  margin-bottom: 40px;
+}
+
+.completion-message h2 {
+  color: #4CAF50;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.completion-message p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.completion-message p:last-child {
+  margin-bottom: 0;
+}
+
+.final-results-summary {
+  text-align: center;
+}
+
+.final-results-summary h3 {
+  color: #4CAF50;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.result-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  color: #ffffff;
+  width: 200px;
+  text-align: center;
+}
+
+.result-card.passed {
+  border-color: #4CAF50;
+}
+
+.result-card h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.result-card .score {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #4CAF50;
+}
+
+.result-card .status {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .learning-session-container {
+    padding: 20px 15px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin: 60px 0 40px 0;
+  }
+  
+  .topic-form {
+    max-width: 100%;
+  }
+  
+  .topic-input {
+    padding: 16px 55px 16px 20px;
+    font-size: 15px;
+  }
+  
+  .prerequisites-list {
+    padding: 20px 15px;
+    gap: 10px;
+  }
+  
+  .prerequisite-item {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .action-button {
+    width: 100%;
+    padding: 14px 20px;
+  }
+  
+  .topics-to-learn {
+    padding: 20px 15px;
+    gap: 10px;
+  }
+  
+  .learning-topic {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,456 @@
+/* Learning Component Styles */
+.learning-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Navigation Icons */
+.nav-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.nav-profile {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Title */
+.title {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 3rem;
+  font-weight: 300;
+  margin: 80px 0 60px 0;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Learning Content */
+.learning-content {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.topic-header {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* Markdown Styles */
+.content-text h1, .content-text h2, .content-text h3 {
+  color: #4CAF50; /* Heading color */
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.content-text p, .content-text li {
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.content-text ul, .content-text ol {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.content-text ul {
+  list-style-type: disc;
+}
+
+.content-text ol {
+  list-style-type: decimal;
+}
+
+.content-text code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #e91e63;
+}
+
+.content-text pre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+/* Content Block */
+.content-block {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px 30px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.content-text {
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  text-align: justify;
+}
+
+/* Action Buttons */
+.content-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  padding: 12px 30px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.action-button.primary {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: #ffffff;
+}
+
+.action-button.primary:hover {
+  background: #45a349;
+  border-color: #45a349;
+}
+
+/* Understanding Options */
+.understanding-options {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.understanding-options p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+}
+
+.option-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.option-button {
+  padding: 10px 25px;
+  background: rgba(255, 108, 0, 0.2);
+  border: 2px solid #ff6c00;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.option-button:hover:not(:disabled) {
+  background: rgba(255, 108, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.option-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Question Dialog */
+.question-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.question-dialog {
+  background: #2c2c2c;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  color: #ffffff;
+}
+
+.question-dialog h3 {
+  margin-bottom: 20px;
+  color: #4CAF50;
+}
+
+.question-dialog textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  color: #ffffff;
+  padding: 15px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 20px;
+}
+
+.question-dialog textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.question-dialog textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.dialog-actions button {
+  padding: 10px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.dialog-actions button:first-child {
+  background: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.dialog-actions button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.dialog-actions button:first-child:hover:not(:disabled) {
+  background: #45a349;
+}
+
+.dialog-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.answer-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.answer-section h4 {
+  color: #4CAF50;
+  margin-bottom: 10px;
+}
+
+.answer-section p {
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Markdown styles for answer content */
+.answer-content h1, .answer-content h2, .answer-content h3 {
+  color: #4CAF50;
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+
+.answer-content p, .answer-content li {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.answer-content ul, .answer-content ol {
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
+
+.answer-content ul {
+  list-style-type: disc;
+}
+
+.answer-content ol {
+  list-style-type: decimal;
+}
+
+.answer-content code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #e91e63;
+}
+
+.answer-content pre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* Completion Message */
+.completion-message {
+  text-align: center;
+  padding: 40px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid #4CAF50;
+  border-radius: 20px;
+  margin-top: 40px;
+}
+
+.completion-message h2 {
+  color: #4CAF50;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.completion-message p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 40px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(76, 175, 80, 0.3);
+  border-top: 3px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .learning-container {
+    padding: 20px 15px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin: 60px 0 40px 0;
+  }
+  
+  .content-block {
+    padding: 25px 20px;
+  }
+  
+  .content-text {
+    font-size: 15px;
+  }
+  
+  .content-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .action-button {
+    width: 100%;
+    padding: 14px 20px;
+  }
+  
+  .option-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+  
+  .question-dialog {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .dialog-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .dialog-actions button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
+

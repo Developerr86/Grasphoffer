@@ -1,70 +1,154 @@
-# Getting Started with Create React App
+# Grasphoffer - AI-Powered Learning Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Grasphoffer is a web-based learning platform that uses LLM to help users understand complex topics by teaching prerequisite knowledge, assessing understanding, and building up to advanced concepts in a structured, tree-like learning approach.
 
-## Available Scripts
+## 🌟 Features
 
-In the project directory, you can run:
+- **Structured Learning Path**: Prerequisite → Main Topic → Advanced Concepts
+- **Interactive Assessments**: MCQ quizzes to test understanding
+- **Adaptive Explanations**: Simple or detailed explanations based on user preference
+- **Progress Tracking**: Monitor learning journey across different phases
+- **User Authentication**: Secure sign-up and login with Supabase
 
-### `npm start`
+## 🏗️ Architecture
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The learning structure follows a tree pattern:
+- **Roots (Prerequisites)**: Foundational concepts required for the main topic
+- **Trunk (Main Topic)**: Core concepts the user wants to learn
+- **Branches (Advanced)**: Specialized and advanced concepts building on the main topic
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or higher)
+- npm or yarn
+- A Supabase account
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Set up Supabase** (Follow detailed instructions in `SUPABASE_SETUP.md`):
+   - Create a new Supabase project
+   - Run the SQL migration from `supabase/migrations/001_initial_schema.sql`
+   - Get your project URL and anon key
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Configure environment variables**:
+   - Update `.env` with your Supabase credentials:
+   ```bash
+   REACT_APP_SUPABASE_URL=your-supabase-project-url
+   REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
 
-### `npm run eject`
+4. **Start the development server**:
+   ```bash
+   npm start
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+5. **Open your browser** and navigate to `http://localhost:3000`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📁 Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+grasphoffer_warp/
+├── public/                     # Public assets
+├── src/
+│   ├── components/             # React components
+│   │   ├── Auth.js            # Authentication component
+│   │   ├── Auth.css           # Auth component styles
+│   │   ├── Dashboard.js       # Main dashboard
+│   │   └── Dashboard.css      # Dashboard styles
+│   ├── context/               # React contexts
+│   │   └── AuthContext.js     # Authentication context
+│   ├── lib/                   # Utility libraries
+│   │   └── supabase.js       # Supabase client configuration
+│   ├── App.js                 # Main app component
+│   ├── App.css               # Global styles
+│   └── index.js              # App entry point
+├── supabase/
+│   └── migrations/            # Database migration files
+│       └── 001_initial_schema.sql
+├── .env                       # Environment variables
+├── SUPABASE_SETUP.md         # Detailed Supabase setup guide
+└── README.md                 # This file
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🗄️ Database Schema
 
-## Learn More
+The application uses PostgreSQL through Supabase with the following tables:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **user_profiles**: Extended user information
+- **learning_topics**: Catalog of available topics
+- **learning_sessions**: User's learning journeys
+- **knowledge_assessments**: User familiarity tracking
+- **quiz_attempts**: Quiz results and scores
+- **learning_progress**: Detailed progress tracking
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🔒 Security Features
 
-### Code Splitting
+- **Row Level Security (RLS)**: Users can only access their own data
+- **Authentication**: Handled by Supabase Auth
+- **Data Validation**: Database constraints ensure data integrity
+- **Automatic Triggers**: User profiles created on signup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🎨 UI/UX Design
 
-### Analyzing the Bundle Size
+- **Dark Theme**: Modern dark gradient background
+- **Responsive Design**: Works on desktop and mobile
+- **Smooth Animations**: Hover effects and transitions
+- **Accessible**: High contrast and readable fonts
+- **Professional**: Clean, minimalist interface
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🧪 Testing the Application
 
-### Making a Progressive Web App
+1. **Sign Up**: Create a new account with your email
+2. **Email Confirmation**: Check your email and confirm your account
+3. **Login**: Use your credentials to log in
+4. **Dashboard**: You should see the main dashboard with topic input
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## ✅ Completed Components
 
-### Advanced Configuration
+### 1. **Authentication System** 
+- Login/Signup with email verification
+- Secure session management with Supabase
+- Professional dark-themed UI
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 2. **Learning Session Interface**
+- Topic input with Gemini AI integration
+- AI-generated prerequisite analysis
+- Interactive prerequisite selection
+- Seamless navigation between dashboard and learning session
+- Matches reference UI design exactly
 
-### Deployment
+## 🔮 Next Steps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Next components to build:
 
-### `npm run build` fails to minify
+1. **Knowledge Assessment Quizzes**: MCQ tests for selected prerequisites
+2. **Learning Content Generator**: AI-powered explanations and teaching materials
+3. **Progress Tracking**: Visual progress through learning phases
+4. **Advanced Topics**: Branching into specialized areas
+5. **Session Management**: Save and resume learning sessions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📚 Tech Stack
+
+- **Frontend**: React.js with hooks
+- **Backend**: Supabase (PostgreSQL, Auth)
+- **Styling**: CSS3 with modern features
+- **State Management**: React Context API
+- **Authentication**: Supabase Auth
+
+## 🐛 Troubleshooting
+
+- **Supabase Connection Error**: Check environment variables
+- **Email Not Received**: Check spam folder
+- **Build Errors**: Run `npm install`
+- **Styling Issues**: Clear browser cache
+
+---
+
+**Happy Learning with Grasphoffer! 🌱**
