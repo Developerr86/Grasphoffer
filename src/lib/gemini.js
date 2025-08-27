@@ -425,7 +425,7 @@ export const answerQuestion = async (question) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const prompt = `
-You are TheGenie, a friendly and knowledgeable AI assistant specializing in education and learning. You help students with their studies, answer questions, provide explanations, and offer learning guidance.
+You are TheHopper, a friendly and knowledgeable AI assistant specializing in education and learning. You help students with their studies, answer questions, provide explanations, and offer learning guidance.
 
 User message: "${question}"
 
@@ -441,7 +441,7 @@ If the question is about learning strategies, study techniques, or educational t
 If it's a specific subject question, explain the concept clearly with examples.
 If it's a general conversation, be friendly while steering toward educational topics when appropriate.
 
-Respond as TheGenie would - knowledgeable, helpful, and encouraging.
+Respond as TheHopper would - knowledgeable, helpful, and encouraging.
 `;
 
     const result = await model.generateContent(prompt);
@@ -456,7 +456,7 @@ Respond as TheGenie would - knowledgeable, helpful, and encouraging.
   }
 };
 
-// Generate general responses for TheGenie conversations
+// Generate general responses for TheHopper conversations
 export const generateResponse = async (message, conversationHistory = []) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -466,12 +466,12 @@ export const generateResponse = async (message, conversationHistory = []) => {
     if (conversationHistory.length > 0) {
       contextPrompt = '\n\nConversation history:\n';
       conversationHistory.slice(-5).forEach(msg => {
-        contextPrompt += `${msg.sender === 'user' ? 'User' : 'TheGenie'}: ${msg.text}\n`;
+        contextPrompt += `${msg.sender === 'user' ? 'User' : 'TheHopper'}: ${msg.text}\n`;
       });
     }
 
     const prompt = `
-You are TheGenie, a friendly and knowledgeable AI assistant specializing in education and learning. You are part of Study Genie, a learning platform that helps students master topics through flashcards, evaluations, and personalized learning paths.
+You are TheHopper, a friendly and knowledgeable AI assistant specializing in education and learning. You are part of Grasphopper, a learning platform that helps students master topics through flashcards, evaluations, and personalized learning paths.
 
 Your personality:
 - Friendly, encouraging, and supportive
@@ -482,7 +482,7 @@ Your personality:
 
 Current user message: "${message}"${contextPrompt}
 
-Respond as TheGenie in a helpful and conversational way. Your response should:
+Respond as TheHopper in a helpful and conversational way. Your response should:
 1. Be warm and encouraging
 2. Directly address the user's message
 3. Provide valuable educational insights when relevant
@@ -497,7 +497,7 @@ If the user asks about:
 - Platform features: Explain how Study Genie can help them learn
 - General conversation: Be friendly while gently steering toward educational topics
 
-Always maintain TheGenie's helpful and encouraging personality.
+Always maintain TheHopper's helpful and encouraging personality.
 `;
 
     const result = await model.generateContent(prompt);
@@ -507,7 +507,7 @@ Always maintain TheGenie's helpful and encouraging personality.
     return text.trim();
   } catch (error) {
     console.error('Error generating response:', error);
-    return "I'm having a bit of trouble right now, but I'm here to help! Could you try asking your question again? I'd love to assist you with your learning journey! 🧞‍♂️";
+    return "I'm having a bit of trouble right now, but I'm here to help! Could you try asking your question again? I'd love to assist you with your learning journey! 🦗";
   }
 };
 

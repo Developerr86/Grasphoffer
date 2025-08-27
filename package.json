@@ -10,7 +10,11 @@
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@xenova/transformers": "^2.17.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "express": "^4.18.2",
+    "groq-sdk": "^0.30.0",
     "pdfjs-dist": "^5.4.54",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -18,13 +22,16 @@
     "react-scripts": "^5.0.1",
     "tesseract.js": "^6.0.1",
     "tesseract.js-core": "^6.0.0",
+    "uuid": "^11.1.0",
     "web-vitals": "^5.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!react-markdown|@google/generative-ai)/\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node backend/server.js",
+    "dev": "concurrently \"npm run server\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [
@@ -57,5 +64,8 @@
     "nth-check": "^2.1.1",
     "postcss": "^8.4.31",
     "webpack-dev-server": "^4.15.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

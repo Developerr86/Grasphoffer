@@ -50,7 +50,6 @@ supabase/
 
 documents/
 faiss_index/
-backend/
 *sql
 t_groq.py
 test_groq.py

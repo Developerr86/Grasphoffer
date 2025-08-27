@@ -53,6 +53,10 @@ export const prepareLearningContext = async (userId) => {
     let documentCount = 0;
     let flashcardCount = 0;
     let struggleCount = struggles?.length || 0;
+
+    // Prepare arrays for the new Stats structure
+    let areasOfDifficulty = [];
+    let learningProgressSummary = [];
     
     // Add documents content
     if (documents && documents.length > 0) {
@@ -76,7 +80,7 @@ export const prepareLearningContext = async (userId) => {
       }
     }
 
-    // Add flashcards content
+    // Add flashcards content and extract learning progress
     if (sessions && sessions.length > 0) {
       contextContent += `## Generated Flashcards\n\n`;
       for (const session of sessions) {
@@ -87,16 +91,23 @@ export const prepareLearningContext = async (userId) => {
             contextContent += `**A${index + 1}:** ${card.answer}\n\n`;
             flashcardCount++;
           });
+
+          // Add to learning progress
+          learningProgressSummary.push(`Completed ${session.topic} session`);
+          if (session.final_score) {
+            learningProgressSummary.push(`Achieved ${session.final_score}% on ${session.topic}`);
+          }
         }
       }
     }
 
-    // Add weak concepts information
+    // Add weak concepts information and populate areas of difficulty
     if (struggles && struggles.length > 0) {
       contextContent += `## Areas of Difficulty\n\n`;
       contextContent += `The user struggles with these concepts:\n\n`;
       struggles.forEach((struggle, index) => {
         contextContent += `${index + 1}. **${struggle.topic_name}** (struggled ${struggle.struggle_count} times)\n`;
+        areasOfDifficulty.push(`${struggle.topic_name} (${struggle.struggle_count} struggles)`);
       });
       contextContent += `\n`;
     }
@@ -108,9 +119,15 @@ export const prepareLearningContext = async (userId) => {
     contextContent += `- Areas of Difficulty: ${struggleCount}\n`;
     contextContent += `- Recent Sessions: ${sessions?.length || 0}\n\n`;
 
+    // Add general progress items
+    learningProgressSummary.push(`Uploaded ${documentCount} documents`);
+    learningProgressSummary.push(`Generated ${flashcardCount} flashcards`);
+    learningProgressSummary.push(`Completed ${sessions?.length || 0} learning sessions`);
+
     return {
       success: true,
       contextContent,
+      Stats: [areasOfDifficulty, learningProgressSummary],
       metadata: {
         documentCount,
         flashcardCount,
@@ -126,6 +143,7 @@ export const prepareLearningContext = async (userId) => {
       success: false,
       error: error.message,
       contextContent: '',
+      Stats: [[], []],
       metadata: {
         documentCount: 0,
         flashcardCount: 0,
@@ -141,17 +159,27 @@ export const prepareLearningContext = async (userId) => {
  * Call TheHopper API with question and context (Async processing)
  * @param {string} question - User's question
  * @param {string} context - Learning context
- * @param {string} weakConcepts - User's weak areas
+ * @param {Array} weakConcepts - User's weak areas
+ * @param {Array} Stats - Learning statistics [areasOfDifficulty, learningProgress]
  * @param {Function} onProgress - Progress callback function
  * @returns {Promise<Object>} TheHopper response
  */
-export const callTheHopper = async (question, context, weakConcepts = [], onProgress = null) => {
+export const callTheHopper = async (question, context, weakConcepts = [], Stats = [[], []], onProgress = null) => {
   try {
     console.log('Calling TheHopper with question:', question);
+    console.log('Context:', context);
+    console.log('Weak Concepts:', weakConcepts);
+    console.log('Stats:', Stats);
     
     // Backend API endpoint (adjust URL based on your setup)
     const apiUrl = process.env.REACT_APP_THEHOPPER_API_URL || 'http://localhost:3001';
-    
+
+    console.log('=== API CALL DEBUG ===');
+    console.log('Environment variable REACT_APP_THEHOPPER_API_URL:', process.env.REACT_APP_THEHOPPER_API_URL);
+    console.log('Final API URL:', apiUrl);
+    console.log('Full endpoint:', `${apiUrl}/api/thehopper/ask`);
+    console.log('=== END API DEBUG ===');
+
     // Step 1: Submit the question and get request ID
     const submitResponse = await fetch(`${apiUrl}/api/thehopper/ask`, {
       method: 'POST',
@@ -161,11 +189,17 @@ export const callTheHopper = async (question, context, weakConcepts = [], onProg
       body: JSON.stringify({
         question,
         context,
-        weakConcepts
+        weakConcepts,
+        Stats
       })
     });
 
     if (!submitResponse.ok) {
+      console.error('=== API SUBMIT ERROR ===');
+      console.error('Status:', submitResponse.status);
+      console.error('Status Text:', submitResponse.statusText);
+      console.error('URL:', submitResponse.url);
+      console.error('=== END SUBMIT ERROR ===');
       throw new Error(`HTTP error! status: ${submitResponse.status}`);
     }
 
@@ -212,12 +246,22 @@ export const callTheHopper = async (question, context, weakConcepts = [], onProg
                 const result = await resultResponse.json();
                 
                 if (result.success) {
+                  console.log('=== RAG RESPONSE RECEIVED ===');
+                  console.log('Source:', result.source || 'RAG_SYSTEM');
+                  console.log('Model:', result.model || 'Unknown');
+                  console.log('Processing Time:', result.processingTime, 'ms');
+                  console.log('Citations Count:', (result.citations || []).length);
+                  console.log('Has Themes:', !!(result.themes || ''));
+                  console.log('=== END OF RAG RESPONSE INFO ===');
+
                   return {
                     success: true,
                     answer: result.answer,
                     citations: result.citations || [],
                     themes: result.themes || '',
-                    processingTime: result.processingTime
+                    processingTime: result.processingTime,
+                    source: result.source || 'RAG_SYSTEM',
+                    model: result.model
                   };
                 } else {
                   throw new Error(result.error || 'Failed to get response from TheHopper');
@@ -264,16 +308,14 @@ export const callTheHopper = async (question, context, weakConcepts = [], onProg
     throw new Error('Request timed out after 5 minutes of polling');
 
   } catch (error) {
-    console.error('Error calling TheHopper:', error);
-    
-    // Fallback response if API is not available
-    return {
-      success: true,
-      answer: `Based on your learning materials, here's what I found:\n\n**Answer to your question:** ${question}\n\nI've analyzed your uploaded documents and learning sessions to provide this response. The information is tailored to your current understanding level and areas of difficulty.\n\n**Note:** I'm currently running in fallback mode. For full RAG capabilities, please ensure the backend API is running.\n\nWould you like me to explain any specific part in more detail or help you with related concepts?`,
-      citations: [],
-      themes: '',
-      fallback: true
-    };
+    console.error('=== THEHOPPER API ERROR ===');
+    console.error('Error type:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Full error:', error);
+    console.error('=== END API ERROR ===');
+
+    // No fallback - throw the error to be handled by the component
+    throw new Error(`RAG Backend API Error: ${error.message}. Please ensure the backend server is running on the correct port.`);
   }
 };
 

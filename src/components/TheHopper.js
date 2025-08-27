@@ -12,6 +12,7 @@ const TheHopper = ({ onClose }) => {
   const [contextReady, setContextReady] = useState(false);
   const [contextInfo, setContextInfo] = useState('');
   const [weakConcepts, setWeakConcepts] = useState([]);
+  const [statsData, setStatsData] = useState([[], []]);
   const [processingStatus, setProcessingStatus] = useState(null);
   const messagesEndRef = useRef(null);
 
@@ -42,7 +43,12 @@ const TheHopper = ({ onClose }) => {
       if (result.success) {
         setContextInfo(result.contextContent);
         setContextReady(true);
-        
+
+        // Store Stats data for RAG requests
+        if (result.Stats) {
+          setStatsData(result.Stats);
+        }
+
         // Extract weak concepts for enhanced responses
         if (result.metadata.struggleCount > 0) {
           const struggles = result.contextContent.match(/\*\*(.*?)\*\*/g)?.map(s => s.replace(/\*\*/g, '')) || [];
@@ -126,13 +132,24 @@ const TheHopper = ({ onClose }) => {
 
       // Call TheHopper service with progress callback
       const response = await callTheHopper(
-        inputMessage, 
-        contextInfo, 
-        weakConcepts, 
+        inputMessage,
+        contextInfo,
+        weakConcepts,
+        statsData,
         handleProgressUpdate
       );
       
       if (response.success) {
+        // Log response source to browser console
+        console.log('=== THEHOPPER RESPONSE RECEIVED ===');
+        console.log('Source:', response.source || 'UNKNOWN');
+        console.log('Model:', response.model || 'UNKNOWN');
+        console.log('Processing Time:', response.processingTime || 'N/A', 'ms');
+        console.log('Citations:', (response.citations || []).length);
+        console.log('Themes:', response.themes || 'None');
+        console.log('Is Fallback:', !!response.fallback);
+        console.log('=== END OF RESPONSE INFO ===');
+
         // Replace thinking message with actual response
         setMessages(prev => prev.map(msg => {
           if (msg.isThinking) {
@@ -163,15 +180,17 @@ const TheHopper = ({ onClose }) => {
       }
 
     } catch (error) {
-      console.error('Error calling TheHopper:', error);
-      
+      console.error('=== THEHOPPER COMPONENT ERROR ===');
+      console.error('Error:', error.message);
+      console.error('=== END COMPONENT ERROR ===');
+
       // Replace thinking message with error
       setMessages(prev => prev.map(msg => {
         if (msg.isThinking) {
           return {
             id: msg.id,
             type: 'hopper',
-            content: `❌ **I apologize, but I encountered an error:**\n\n${error.message}\n\nPlease try again in a moment, or rephrase your question.`,
+            content: `❌ **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3001\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
             timestamp: new Date()
           };
         }
