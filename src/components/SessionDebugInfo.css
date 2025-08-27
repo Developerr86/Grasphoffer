@@ -1,0 +1,44 @@
+.session-debug-info {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 9999;
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.session-debug-info h4 {
+  margin: 0 0 10px 0;
+  color: #ffff00;
+  font-size: 14px;
+}
+
+.debug-section {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.debug-section strong {
+  color: #00ffff;
+}
+
+.debug-section pre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

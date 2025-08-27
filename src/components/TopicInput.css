@@ -1,0 +1,205 @@
+/* Modern Topic Input Component */
+.topic-input-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.input-method-card {
+  background: rgba(26, 26, 46, 0.6);
+  border-radius: 24px;
+  padding: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.input-method-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.input-method-header {
+  margin-bottom: 40px;
+}
+
+.input-method-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+}
+
+.input-method-header h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.input-method-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.topic-form {
+  margin-bottom: 32px;
+}
+
+.topic-input-group {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+}
+
+.topic-input-field {
+  width: 100%;
+  padding: 18px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  outline: none;
+}
+
+.topic-input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.topic-input-field:focus {
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.topic-input-field:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+}
+
+.topic-submit-button {
+  padding: 18px 36px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.topic-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.topic-submit-button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.topic-examples {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 24px;
+}
+
+.topic-examples p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+.example-topics {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.example-topic {
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 25px;
+  font-size: 15px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.example-topic:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.example-topic:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (min-width: 640px) {
+  .topic-input-group {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .topic-input-field {
+    flex: 1;
+  }
+
+  .topic-submit-button {
+    align-self: stretch;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-method-card {
+    padding: 32px 24px;
+  }
+
+  .input-method-icon {
+    font-size: 48px;
+  }
+
+  .input-method-header h3 {
+    font-size: 24px;
+  }
+
+  .input-method-header p {
+    font-size: 16px;
+  }
+
+  .topic-input-field {
+    font-size: 16px;
+    padding: 16px 20px;
+  }
+
+  .topic-submit-button {
+    font-size: 16px;
+    padding: 16px 28px;
+  }
+}
