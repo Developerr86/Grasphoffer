@@ -7,6 +7,7 @@ import DepthLearningSession from './components/DepthLearningSession';
 import FastLearningSession from './components/FastLearningSession';
 import Profile from './components/Profile';
 import TheHopperPage from './components/TheHopperPage';
+import PodcastPage from './components/PodcastPage';
 import MagicLoader from './components/MagicLoader';
 
 // Loading component with dashboard theme
@@ -52,6 +53,10 @@ const AppContent = () => {
     setCurrentView('thehopper');
   };
 
+  const handleOpenPodcasts = () => {
+    setCurrentView('podcasts');
+  };
+
   if (currentView === 'learning' && learningData) {
     if (learningData.type === 'fast') {
       return (
@@ -81,7 +86,11 @@ const AppContent = () => {
     return <TheHopperPage onBack={handleBackToDashboard} />;
   }
 
-  return <Dashboard onStartLearning={handleStartLearning} onOpenProfile={handleOpenProfile} onOpenTheHopper={handleOpenTheHopper} />;
+  if (currentView === 'podcasts') {
+    return <PodcastPage onBack={handleBackToDashboard} />;
+  }
+
+  return <Dashboard onStartLearning={handleStartLearning} onOpenProfile={handleOpenProfile} onOpenTheHopper={handleOpenTheHopper} onOpenPodcasts={handleOpenPodcasts} />;
 };
 
 function App() {

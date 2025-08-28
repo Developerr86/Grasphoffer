@@ -8,7 +8,7 @@ import FileUpload from './FileUpload';
 import SessionTypeSelector from './SessionTypeSelector';
 import './Dashboard.css';
 
-const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper }) => {
+const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodcasts }) => {
   const { user, signOut } = useAuth();
   const [inputMethod, setInputMethod] = useState('topic'); // 'topic' or 'files'
   const [displayName, setDisplayName] = useState(''); // full_name or email
@@ -165,6 +165,10 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper }) => {
           <div className="nav-item" onClick={onOpenTheHopper}>
             <span className="nav-icon">🦗</span>
             <span className="nav-text">Ask TheHopper</span>
+          </div>
+          <div className="nav-item" onClick={onOpenPodcasts}>
+            <span className="nav-icon">🎙️</span>
+            <span className="nav-text">Podcasts</span>
           </div>
         </nav>
 

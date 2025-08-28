@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../context/AuthContext';
 import { prepareLearningContext, callTheHopper } from '../lib/theHopperService';
 import MagicLoader from './MagicLoader';
@@ -190,7 +191,7 @@ const TheHopper = ({ onClose }) => {
           return {
             id: msg.id,
             type: 'hopper',
-            content: `❌ **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3001\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
+            content: `❌ **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3002\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
             timestamp: new Date()
           };
         }
@@ -256,7 +257,11 @@ const TheHopper = ({ onClose }) => {
           {messages.map((message) => (
             <div key={message.id} className={`message ${message.type}`}>
               <div className="message-content">
-                {message.content}
+                {message.type === 'hopper' || message.type === 'error' ? (
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                ) : (
+                  message.content
+                )}
               </div>
               <div className="message-timestamp">
                 {message.timestamp.toLocaleTimeString()}

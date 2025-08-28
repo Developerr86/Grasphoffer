@@ -228,6 +228,7 @@
   line-height: 1.5;
   word-wrap: break-word;
   white-space: pre-wrap;
+  text-align: left;
 }
 
 .message.user .message-content {
@@ -470,4 +471,97 @@
 @keyframes progressShimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* Enhanced Markdown styling for TheHopper messages */
+.message.hopper .message-content h1,
+.message.hopper .message-content h2,
+.message.hopper .message-content h3,
+.message.hopper .message-content h4,
+.message.hopper .message-content h5,
+.message.hopper .message-content h6 {
+  margin: 16px 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #81C784;
+}
+
+.message.hopper .message-content h1 { font-size: 18px; }
+.message.hopper .message-content h2 { font-size: 16px; }
+.message.hopper .message-content h3 { font-size: 15px; }
+.message.hopper .message-content h4 { font-size: 14px; }
+
+.message.hopper .message-content p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.message.hopper .message-content ul,
+.message.hopper .message-content ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.message.hopper .message-content li {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.message.hopper .message-content pre {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #E8F5E8;
+}
+
+.message.hopper .message-content blockquote {
+  border-left: 3px solid #4CAF50;
+  padding-left: 12px;
+  margin: 8px 0;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.message.hopper .message-content a {
+  color: #81C784;
+  text-decoration: none;
+}
+
+.message.hopper .message-content a:hover {
+  text-decoration: underline;
+  color: #A5D6A7;
+}
+
+/* Error message markdown styling */
+.message.error .message-content {
+  background: rgba(244, 67, 54, 0.2);
+  color: #FF5722;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  border-radius: 12px;
+}
+
+.message.error .message-content h1,
+.message.error .message-content h2,
+.message.error .message-content h3,
+.message.error .message-content h4 {
+  color: #FF8A65;
+  margin: 12px 0 8px 0;
+}
+
+.message.error .message-content strong {
+  color: #FF5722;
+  font-weight: 600;
+}
+
+.message.error .message-content code {
+  background: rgba(0, 0, 0, 0.3);
+  color: #FFB74D;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
 }

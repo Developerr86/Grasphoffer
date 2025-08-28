@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { generateResponse } from '../lib/gemini';
+import ReactMarkdown from 'react-markdown';
+import { useAuth } from '../context/AuthContext';
+import { callTheHopper, prepareLearningContext } from '../lib/theHopperService';
 import ForceDirectedGraph from './ForceDirectedGraph';
 import './TheHopperPage.css';
 
 const TheHopperPage = ({ onBack }) => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +25,7 @@ const TheHopperPage = ({ onBack }) => {
 
     const userMessage = inputValue.trim();
     setInputValue('');
-    
+
     // Add user message
     const newUserMessage = {
       id: Date.now(),
@@ -30,27 +33,58 @@ const TheHopperPage = ({ onBack }) => {
       sender: 'user',
       timestamp: new Date()
     };
-    
+
     setMessages(prev => [...prev, newUserMessage]);
     setIsLoading(true);
 
     try {
-      // Generate AI response with conversation context
-      const aiResponse = await generateResponse(userMessage, messages);
+      console.log('=== THEHOPPER PAGE RAG CALL ===');
+      console.log('Question:', userMessage);
+
+      // Prepare learning context for RAG
+      const contextResult = await prepareLearningContext(user?.id);
+
+      if (!contextResult.success) {
+        throw new Error('Failed to prepare learning context');
+      }
+
+      console.log('Context prepared successfully');
+      console.log('Stats:', contextResult.Stats);
+
+      // Call RAG backend
+      const response = await callTheHopper(
+        userMessage,
+        contextResult.contextContent,
+        [], // weak concepts - could be extracted from context
+        contextResult.Stats
+      );
+
+      console.log('=== RAG RESPONSE RECEIVED ===');
+      console.log('Source:', response.source);
+      console.log('Processing Time:', response.processingTime);
+      console.log('=== END RAG RESPONSE ===');
 
       const aiMessage = {
         id: Date.now() + 1,
-        text: aiResponse,
+        text: response.answer,
         sender: 'ai',
-        timestamp: new Date()
+        timestamp: new Date(),
+        citations: response.citations || [],
+        themes: response.themes || '',
+        processingTime: response.processingTime,
+        source: response.source
       };
 
       setMessages(prev => [...prev, aiMessage]);
+
     } catch (error) {
-      console.error('Error generating response:', error);
+      console.error('=== THEHOPPER PAGE ERROR ===');
+      console.error('Error:', error.message);
+      console.error('=== END ERROR ===');
+
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I apologize, but I'm having trouble processing your request right now. Please try again.",
+        text: `❌ **RAG Backend Error**\n\n${error.message}\n\n**Please ensure:**\n• Backend server is running: \`npm run server\`\n• Server is accessible at: \`http://localhost:3002\`\n• Check browser console for detailed logs`,
         sender: 'ai',
         timestamp: new Date(),
         isError: true
@@ -124,7 +158,13 @@ const TheHopperPage = ({ onBack }) => {
                     </div>
                   )}
                   <div className="message-content">
-                    <div className="message-text">{message.text}</div>
+                    <div className="message-text">
+                      {message.sender === 'ai' ? (
+                        <ReactMarkdown>{message.text}</ReactMarkdown>
+                      ) : (
+                        message.text
+                      )}
+                    </div>
                     <div className="message-time">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>

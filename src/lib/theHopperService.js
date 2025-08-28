@@ -172,7 +172,7 @@ export const callTheHopper = async (question, context, weakConcepts = [], Stats 
     console.log('Stats:', Stats);
     
     // Backend API endpoint (adjust URL based on your setup)
-    const apiUrl = process.env.REACT_APP_THEHOPPER_API_URL || 'http://localhost:3001';
+    const apiUrl = process.env.REACT_APP_THEHOPPER_API_URL || 'http://localhost:3002';
 
     console.log('=== API CALL DEBUG ===');
     console.log('Environment variable REACT_APP_THEHOPPER_API_URL:', process.env.REACT_APP_THEHOPPER_API_URL);
