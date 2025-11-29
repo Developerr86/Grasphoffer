@@ -5,6 +5,10 @@ import LearningComponent from './LearningComponent';
 import MagicLoader from './MagicLoader';
 import './LearningSession.css';
 
+// Icons
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
+
 const LearningSession = ({ topic: initialTopic = '', onBack }) => {
   const [topic, setTopic] = useState(initialTopic);
   const [prerequisites, setPrerequisites] = useState([]);
@@ -31,14 +35,14 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
         }
       }
     };
-    
+
     autoSubmit();
   }, [initialTopic]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!topic.trim()) return;
-    
+
     setLoading(true);
     try {
       const prerequisites = await generatePrerequisites(topic);
@@ -153,16 +157,16 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
       <div className="learning-session-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
@@ -170,11 +174,11 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
 
         <div className="completion-section">
           <div className="completion-message">
-            <h2>🎉 Congratulations!</h2>
+            <h2><img src={targetIcon} alt="Congrats" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Congratulations!</h2>
             <p>You have successfully completed all prerequisite learning and evaluations!</p>
             <p>You're now ready to learn the main topic: <strong>{topic}</strong></p>
           </div>
-          
+
           {finalEvaluationResults && (
             <div className="final-results-summary">
               <h3>Final Evaluation Summary:</h3>
@@ -188,7 +192,7 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
                         {result.correct}/{result.total}
                       </div>
                       <div className="status">
-                        ✓ Mastered
+                        <img src={checkIcon} alt="Mastered" style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} /> Mastered
                       </div>
                     </div>
                   );
@@ -207,16 +211,16 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
       {/* Navigation Icons */}
       <div className="nav-menu" onClick={onBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </div>
-      
+
       <div className="nav-profile">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       </div>
 
@@ -235,8 +239,8 @@ const LearningSession = ({ topic: initialTopic = '', onBack }) => {
             <div className="loading-spinner-small"></div>
           ) : (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="M21 21l-4.35-4.35"/>
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
             </svg>
           )}
         </button>

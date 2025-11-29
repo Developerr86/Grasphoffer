@@ -25,7 +25,7 @@ Only return the JSON array, no additional text or explanation.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     try {
       // Remove markdown code blocks if present
@@ -35,7 +35,7 @@ Only return the JSON array, no additional text or explanation.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const prerequisites = JSON.parse(cleanText.trim());
       return prerequisites;
     } catch (parseError) {
@@ -54,7 +54,7 @@ Only return the JSON array, no additional text or explanation.
     // Return fallback prerequisites
     return [
       'Basic Mathematics',
-      'Logical Thinking', 
+      'Logical Thinking',
       'Problem Solving',
       'Computer Basics',
       'Analytical Skills'
@@ -103,7 +103,7 @@ Only return the JSON array, no additional text or explanation.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     try {
       // Remove markdown code blocks if present
@@ -113,7 +113,7 @@ Only return the JSON array, no additional text or explanation.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const questions = JSON.parse(cleanText.trim());
       return questions;
     } catch (parseError) {
@@ -262,7 +262,7 @@ Only return the JSON, no additional text.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     try {
       // Remove markdown code blocks if present
@@ -272,7 +272,7 @@ Only return the JSON, no additional text.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const report = JSON.parse(cleanText.trim());
       return report;
     } catch (parseError) {
@@ -280,7 +280,7 @@ Only return the JSON, no additional text.
       // Fallback report
       return {
         remark: `You completed the evaluation with ${passedTopics} out of ${totalTopics} topics passed. ${failedTopics > 0 ? 'Focus on the failed topics to strengthen your foundation.' : 'Great job on passing all topics!'}`,
-        recommendations: failedTopics > 0 
+        recommendations: failedTopics > 0
           ? ["Review the topics you didn't pass", "Practice more questions on weak areas", "Seek additional resources for difficult concepts"]
           : ["Continue to the main learning material", "You have a solid foundation in the prerequisites"]
       };
@@ -291,10 +291,10 @@ Only return the JSON, no additional text.
     const passedTopics = topics.filter(topic => results[topic].passed).length;
     const totalTopics = topics.length;
     const failedTopics = totalTopics - passedTopics;
-    
+
     return {
       remark: `You completed the evaluation with ${passedTopics} out of ${totalTopics} topics passed. ${failedTopics > 0 ? 'Focus on the failed topics to strengthen your foundation.' : 'Great job on passing all topics!'}`,
-      recommendations: failedTopics > 0 
+      recommendations: failedTopics > 0
         ? ["Review the topics you didn't pass", "Practice more questions on weak areas", "Seek additional resources for difficult concepts"]
         : ["Continue to the main learning material", "You have a solid foundation in the prerequisites"]
     };
@@ -323,7 +323,7 @@ Only return the JSON array, no additional text.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     try {
       // Remove markdown code blocks if present
@@ -333,7 +333,7 @@ Only return the JSON array, no additional text.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const subtopics = JSON.parse(cleanText.trim());
       return subtopics;
     } catch (parseError) {
@@ -380,7 +380,7 @@ Return only the content text, no additional formatting or explanations.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     return text.trim();
   } catch (error) {
     console.error('Error generating subtopic content:', error);
@@ -411,7 +411,7 @@ Return only the rephrased content, no additional text.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     return text.trim();
   } catch (error) {
     console.error('Error rephrasing content:', error);
@@ -507,7 +507,7 @@ Always maintain TheHopper's helpful and encouraging personality.
     return text.trim();
   } catch (error) {
     console.error('Error generating response:', error);
-    return "I'm having a bit of trouble right now, but I'm here to help! Could you try asking your question again? I'd love to assist you with your learning journey! 🦗";
+    return "I'm having a bit of trouble right now, but I'm here to help! Could you try asking your question again? I'd love to assist you with your learning journey!";
   }
 };
 
@@ -544,7 +544,7 @@ Only return the JSON, no additional text.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     try {
       // Remove markdown code blocks if present
       let cleanText = text.trim();
@@ -553,7 +553,7 @@ Only return the JSON, no additional text.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const topicInfo = JSON.parse(cleanText.trim());
       return topicInfo;
     } catch (parseError) {
@@ -616,7 +616,7 @@ Only return the JSON array, no additional text or explanation.
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     try {
       // Remove markdown code blocks if present
@@ -626,7 +626,7 @@ Only return the JSON array, no additional text or explanation.
       } else if (cleanText.startsWith('```')) {
         cleanText = cleanText.replace(/```\s*/, '').replace(/```\s*$/, '');
       }
-      
+
       const flashcards = JSON.parse(cleanText.trim());
       return flashcards;
     } catch (parseError) {

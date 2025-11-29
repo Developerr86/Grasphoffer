@@ -1,12 +1,15 @@
 import React from 'react';
 import './SessionTypeSelector.css';
+import boltIcon from '../assets/icons/Lightning-bolt.PNG';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
 
 const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) => {
   const sessionTypes = [
     {
       id: 'fast',
       name: 'Fast Learning',
-      icon: '⚡',
+      icon: <img src={boltIcon} alt="Fast" style={{ width: '24px', height: '24px' }} />,
       description: 'Quick session with 10 flashcards and 15 MCQs',
       features: [
         'No prerequisites evaluation',
@@ -19,7 +22,7 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
     {
       id: 'depth',
       name: 'Depth Learning',
-      icon: '🌳',
+      icon: <img src={treeIcon} alt="Depth" style={{ width: '24px', height: '24px' }} />,
       description: 'Comprehensive tree-based learning approach',
       features: [
         'Prerequisites analysis',
@@ -37,7 +40,7 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
         <h3>Choose Your Learning Style</h3>
         <p>Select the type of learning session that fits your needs</p>
       </div>
-      
+
       <div className="session-types-grid">
         {sessionTypes.map((type) => (
           <div
@@ -53,10 +56,10 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
                 <p>{type.description}</p>
               </div>
               <div className="selection-indicator">
-                {selectedType === type.id && <div className="check-mark">✓</div>}
+                {selectedType === type.id && <div className="check-mark"><img src={checkIcon} alt="Selected" style={{ width: '16px', height: '16px' }} /></div>}
               </div>
             </div>
-            
+
             <div className="session-type-features">
               <ul>
                 {type.features.map((feature, index) => (
@@ -67,7 +70,7 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
           </div>
         ))}
       </div>
-      
+
       <div className="selection-summary">
         {selectedType && (
           <div className="selected-type-summary">

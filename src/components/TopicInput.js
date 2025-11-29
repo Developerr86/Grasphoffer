@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './TopicInput.css';
+import targetIcon from '../assets/icons/Target-board.PNG';
 
 const TopicInput = ({ onTopicSubmit, disabled = false }) => {
   const [topic, setTopic] = useState('');
@@ -15,11 +16,11 @@ const TopicInput = ({ onTopicSubmit, disabled = false }) => {
     <div className="topic-input-container">
       <div className="input-method-card">
         <div className="input-method-header">
-          <div className="input-method-icon">📝</div>
+          <div className="input-method-icon"><img src={targetIcon} alt="Topic" style={{ width: '48px', height: '48px' }} /></div>
           <h3>Enter a Topic</h3>
           <p>Type in what you want to learn about</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="topic-form">
           <div className="topic-input-group">
             <input
@@ -30,8 +31,8 @@ const TopicInput = ({ onTopicSubmit, disabled = false }) => {
               className="topic-input-field"
               disabled={disabled}
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="topic-submit-button"
               disabled={!topic.trim() || disabled}
             >
@@ -39,25 +40,25 @@ const TopicInput = ({ onTopicSubmit, disabled = false }) => {
             </button>
           </div>
         </form>
-        
+
         <div className="topic-examples">
           <p>Examples:</p>
           <div className="example-topics">
-            <button 
+            <button
               className="example-topic"
               onClick={() => setTopic('Machine Learning')}
               disabled={disabled}
             >
               Machine Learning
             </button>
-            <button 
+            <button
               className="example-topic"
               onClick={() => setTopic('React Hooks')}
               disabled={disabled}
             >
               React Hooks
             </button>
-            <button 
+            <button
               className="example-topic"
               onClick={() => setTopic('Data Structures')}
               disabled={disabled}

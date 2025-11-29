@@ -5,6 +5,10 @@ import { callTheHopper, prepareLearningContext } from '../lib/theHopperService';
 import ForceDirectedGraph from './ForceDirectedGraph';
 import './TheHopperPage.css';
 
+// Icons
+import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
+
 const TheHopperPage = ({ onBack }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -84,7 +88,7 @@ const TheHopperPage = ({ onBack }) => {
 
       const errorMessage = {
         id: Date.now() + 1,
-        text: `❌ **RAG Backend Error**\n\n${error.message}\n\n**Please ensure:**\n• Backend server is running: \`npm run server\`\n• Server is accessible at: \`http://localhost:3002\`\n• Check browser console for detailed logs`,
+        text: `![Error](${logoutIcon}) **RAG Backend Error**\n\n${error.message}\n\n**Please ensure:**\n• Backend server is running: \`npm run server\`\n• Server is accessible at: \`http://localhost:3002\`\n• Check browser console for detailed logs`,
         sender: 'ai',
         timestamp: new Date(),
         isError: true
@@ -111,19 +115,19 @@ const TheHopperPage = ({ onBack }) => {
         <div className="header-left">
           <button className="back-button" onClick={onBack}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+              <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
           <div className="hopper-title">
-            <span className="hopper-icon">🦗</span>
+            <img src={hopperIcon} alt="Hopper" className="hopper-icon" style={{ width: '24px', height: '24px' }} />
             <span>TheHopper</span>
           </div>
         </div>
         <div className="header-right">
           <button className="settings-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" />
             </svg>
           </button>
         </div>
@@ -154,7 +158,7 @@ const TheHopperPage = ({ onBack }) => {
                 <div key={message.id} className={`message ${message.sender}`}>
                   {message.sender === 'ai' && (
                     <div className="message-avatar">
-                      <span>🦗</span>
+                      <img src={hopperIcon} alt="Hopper" style={{ width: '24px', height: '24px' }} />
                     </div>
                   )}
                   <div className="message-content">
@@ -174,7 +178,7 @@ const TheHopperPage = ({ onBack }) => {
               {isLoading && (
                 <div className="message ai">
                   <div className="message-avatar">
-                    <span>🦗</span>
+                    <img src={hopperIcon} alt="Hopper" style={{ width: '24px', height: '24px' }} />
                   </div>
                   <div className="message-content">
                     <div className="typing-indicator">
@@ -196,10 +200,10 @@ const TheHopperPage = ({ onBack }) => {
         <div className="input-container">
           <button className="attachment-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
             </svg>
           </button>
-          
+
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -208,15 +212,15 @@ const TheHopperPage = ({ onBack }) => {
             className="message-input"
             rows="1"
           />
-          
-          <button 
+
+          <button
             className="send-button"
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isLoading}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22,2 15,22 11,13 2,9 22,2" />
             </svg>
           </button>
         </div>

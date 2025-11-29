@@ -1,6 +1,9 @@
 import React from 'react';
 import { useFileProcessor, formatFileSize, getFileTypeDisplay } from '../hooks/useFileProcessor';
 import './FileProcessor.css';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
 
 const FileProcessor = ({ files, onComplete, onError }) => {
   const {
@@ -39,7 +42,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
           .filter(r => r.success && r.markdownContent)
           .map(r => r.markdownContent)
           .join('\n\n---\n\n');
-        
+
         if (onComplete) {
           onComplete({
             results,
@@ -56,7 +59,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
           onComplete(results[0]);
         }
       }
-      
+
       if (hasErrors && onError) {
         onError(errors);
       }
@@ -65,7 +68,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
 
   const handleProcessFiles = async () => {
     if (!files || files.length === 0) return;
-    
+
     console.log(`Starting to process ${files.length} files`);
     clearResults();
     await processFiles(files);
@@ -83,14 +86,14 @@ const FileProcessor = ({ files, onComplete, onError }) => {
             <h4>Processing Files...</h4>
             <span className="file-count">{successCount + errorCount + 1} / {files.length}</span>
           </div>
-          
+
           {currentFile && (
             <div className="current-file">
-              <span className="file-icon">📄</span>
+              <span className="file-icon"><img src={treeIcon} alt="File" style={{ width: '16px', height: '16px' }} /></span>
               <span className="file-name">{currentFile}</span>
             </div>
           )}
-          
+
           <div className="progress-container">
             <div className="progress-bar">
               <div
@@ -100,7 +103,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
             </div>
             <span className="progress-text">{Math.round(progress)}%</span>
           </div>
-          
+
           <div className="processing-info">
             <p>Extracting text using PDF.js and Tesseract OCR...</p>
             <p>This may take a few minutes for large files.</p>
@@ -114,10 +117,10 @@ const FileProcessor = ({ files, onComplete, onError }) => {
             <h4>Processing Complete</h4>
             <div className="results-summary">
               {successCount > 0 && (
-                <span className="success-count">✅ {successCount} successful</span>
+                <span className="success-count"><img src={checkIcon} alt="Success" style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} /> {successCount} successful</span>
               )}
               {errorCount > 0 && (
-                <span className="error-count">❌ {errorCount} failed</span>
+                <span className="error-count"><img src={logoutIcon} alt="Failed" style={{ width: '16px', height: '16px', verticalAlign: 'middle' }} /> {errorCount} failed</span>
               )}
             </div>
           </div>
@@ -129,23 +132,23 @@ const FileProcessor = ({ files, onComplete, onError }) => {
                 {results.map((result, index) => (
                   <div key={index} className="result-item success">
                     <div className="result-header">
-                      <span className="result-icon">✅</span>
+                      <span className="result-icon"><img src={checkIcon} alt="Success" style={{ width: '16px', height: '16px' }} /></span>
                       <span className="result-filename">{result.fileName}</span>
                       <span className="result-method">{result.processingMethod}</span>
                     </div>
-                    
+
                     <div className="result-details">
                       <div className="text-preview">
                         <strong>Extracted Text Preview:</strong>
                         <p>{result.extractedText.substring(0, 200)}...</p>
                       </div>
-                      
+
                       {result.markdownUrl && (
                         <div className="storage-info">
                           <strong>Stored in Supabase:</strong>
-                          <a 
-                            href={result.markdownUrl} 
-                            target="_blank" 
+                          <a
+                            href={result.markdownUrl}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="storage-link"
                           >
@@ -166,7 +169,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
               <div className="error-list">
                 {errors.map((error, index) => (
                   <div key={index} className="result-item error">
-                    <span className="result-icon">❌</span>
+                    <span className="result-icon"><img src={logoutIcon} alt="Error" style={{ width: '16px', height: '16px' }} /></span>
                     <span className="error-message">{error}</span>
                   </div>
                 ))}
@@ -175,7 +178,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
           )}
 
           <div className="results-actions">
-            <button 
+            <button
               onClick={clearResults}
               className="clear-results-btn"
             >
@@ -192,7 +195,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
             {files.map((file, index) => (
               <div key={index} className="file-item">
                 <span className="file-icon">
-                  {file.type === 'application/pdf' ? '📄' : '🖼️'}
+                  {file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="Image" style={{ width: '16px', height: '16px' }} />}
                 </span>
                 <div className="file-info">
                   <span className="file-name">{file.name}</span>
@@ -203,8 +206,8 @@ const FileProcessor = ({ files, onComplete, onError }) => {
               </div>
             ))}
           </div>
-          
-          <button 
+
+          <button
             onClick={handleProcessFiles}
             className="process-btn"
             disabled={processing}

@@ -1,4 +1,4 @@
-/* Modern Topic Input Component */
+/* Modern Topic Input Component - Soft Neobrutalism */
 .topic-input-container {
   width: 100%;
   max-width: 600px;
@@ -7,163 +7,177 @@
 }
 
 .input-method-card {
-  background: rgba(26, 26, 46, 0.6);
-  border-radius: 24px;
-  padding: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
+  background: transparent;
+  border-radius: 0;
+  padding: 2rem 0;
+  border: none;
+  box-shadow: none;
   text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.input-method-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-  border-color: rgba(102, 126, 234, 0.3);
 }
 
 .input-method-header {
-  margin-bottom: 40px;
+  margin-bottom: 2rem;
 }
 
 .input-method-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--accent-yellow);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: var(--shadow-hard-sm);
+  overflow: hidden;
 }
 
 .input-method-header h3 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 12px 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
 }
 
 .input-method-header p {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 18px;
+  color: var(--text-secondary);
+  font-size: 1rem;
   margin: 0;
   line-height: 1.5;
+  font-weight: 500;
 }
 
+/* Topic Input Group */
 .topic-form {
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .topic-input-group {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
   flex-direction: column;
 }
 
 .topic-input-field {
-  width: 100%;
-  padding: 18px 24px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-input);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: #FFFFFF;
+  color: var(--text-main);
   outline: none;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .topic-input-field::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .topic-input-field:focus {
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
 }
 
 .topic-input-field:disabled {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
+  background: #f3f4f6;
+  color: var(--text-secondary);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .topic-submit-button {
-  padding: 18px 36px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 16px;
-  font-size: 18px;
-  font-weight: 600;
+  padding: 1rem 1.5rem;
+  background-color: var(--accent-purple);
+  color: var(--text-main);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-btn);
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  align-self: flex-start;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .topic-submit-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+  background-color: #a78bfa;
+}
+
+.topic-submit-button:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: none;
 }
 
 .topic-submit-button:disabled {
-  background: rgba(255, 255, 255, 0.1);
+  background-color: #e5e7eb;
+  color: var(--text-secondary);
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
-  opacity: 0.5;
-}
-
-.topic-examples {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 24px;
+  transform: none;
+  border-color: #d1d5db;
 }
 
 .topic-examples p {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
-  margin: 0 0 16px 0;
-  font-weight: 500;
+  color: var(--text-main);
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .example-topics {
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .example-topic {
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-  border-radius: 25px;
-  font-size: 15px;
-  color: #ffffff;
+  padding: 0.5rem 1rem;
+  background: #FFFFFF;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  color: var(--text-main);
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  box-shadow: 2px 2px 0px var(--border-color);
 }
 
 .example-topic:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.2);
-  border-color: #667eea;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  background-color: var(--accent-purple);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-color);
+}
+
+.example-topic:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-color);
 }
 
 .example-topic:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
+  background-color: #f3f4f6;
 }
 
 /* Responsive Design */
 @media (min-width: 640px) {
   .topic-input-group {
     flex-direction: row;
-    align-items: flex-end;
+    align-items: stretch;
   }
 
   .topic-input-field {
@@ -173,33 +187,7 @@
   .topic-submit-button {
     align-self: stretch;
     white-space: nowrap;
-  }
-}
-
-@media (max-width: 480px) {
-  .input-method-card {
-    padding: 32px 24px;
-  }
-
-  .input-method-icon {
-    font-size: 48px;
-  }
-
-  .input-method-header h3 {
-    font-size: 24px;
-  }
-
-  .input-method-header p {
-    font-size: 16px;
-  }
-
-  .topic-input-field {
-    font-size: 16px;
-    padding: 16px 20px;
-  }
-
-  .topic-submit-button {
-    font-size: 16px;
-    padding: 16px 28px;
+    display: flex;
+    align-items: center;
   }
 }

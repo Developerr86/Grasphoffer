@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { generateMCQQuestions, generateEvaluationReport } from '../lib/gemini';
 import MagicLoader from './MagicLoader';
 import './Evaluation.css';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
 
 const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => {
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
@@ -73,18 +75,18 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
 
   const completeEvaluationWithAnswers = async (finalAnswers) => {
     setLoading(true);
-    
+
     // Calculate results using the final answers
     const results = {};
     prerequisitesArray.forEach((topic, topicIndex) => {
       const topicAnswers = Object.keys(finalAnswers)
         .filter(key => key.startsWith(`${topicIndex}-`))
         .map(key => finalAnswers[key]);
-      
+
       const correctAnswers = topicAnswers.filter(answer => answer.isCorrect).length;
       const totalQuestions = 5; // As per requirement
       const passed = correctAnswers >= 4; // Need 4 out of 5 correct
-      
+
       results[topic] = {
         correct: correctAnswers,
         total: totalQuestions,
@@ -113,18 +115,18 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
 
   const completeEvaluation = async () => {
     setLoading(true);
-    
+
     // Calculate results
     const results = {};
     prerequisitesArray.forEach((topic, topicIndex) => {
       const topicAnswers = Object.keys(answers)
         .filter(key => key.startsWith(`${topicIndex}-`))
         .map(key => answers[key]);
-      
+
       const correctAnswers = topicAnswers.filter(answer => answer.isCorrect).length;
       const totalQuestions = 5; // As per requirement
       const passed = correctAnswers >= 4; // Need 4 out of 5 correct
-      
+
       results[topic] = {
         correct: correctAnswers,
         total: totalQuestions,
@@ -156,7 +158,7 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
   };
 
   const handleProceedToLearning = () => {
-    const topicsToLearn = prerequisitesArray.filter(topic => 
+    const topicsToLearn = prerequisitesArray.filter(topic =>
       !evaluationResults[topic]?.passed
     );
     onEvaluationComplete(topicsToLearn, evaluationResults);
@@ -173,21 +175,21 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
       <div className="evaluation-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
         <h1 className="title">Grasphopper</h1>
-        
+
         <div className="loading">
           <MagicLoader size={120} particleCount={2} speed={1.2} hueRange={[200, 280]} />
           <p>Generating evaluation questions...</p>
@@ -201,16 +203,16 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
       <div className="evaluation-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
@@ -229,7 +231,7 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
                       {result.correct}/{result.total}
                     </div>
                     <div className="status">
-                      {result.passed ? '✓ Passed' : '✗ Failed'}
+                      {result.passed ? <img src={checkIcon} alt="Passed" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> : <img src={logoutIcon} alt="Failed" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />} {result.passed ? 'Passed' : 'Failed'}
                     </div>
                   </div>
                 );
@@ -249,7 +251,7 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
                 <h3>General Remark</h3>
                 <p>{report.remark}</p>
               </div>
-              
+
               {report.recommendations && report.recommendations.length > 0 && (
                 <div className="recommendations">
                   <h3>Recommendations</h3>
@@ -276,16 +278,16 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
     <div className="evaluation-container">
       <div className="nav-menu" onClick={onBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </div>
-      
+
       <div className="nav-profile">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       </div>
 
@@ -295,14 +297,14 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
         <div className="quiz-header">
           <h2>Quiz • {currentTopic}</h2>
           <div className="progress">
-            Question {currentQuestionIndex + 1} of {questions.length} • 
+            Question {currentQuestionIndex + 1} of {questions.length} •
             Topic {currentTopicIndex + 1} of {prerequisitesArray.length}
           </div>
         </div>
 
         <div className="question-card">
           <h3>{currentQuestionIndex + 1}. {currentQuestion?.question}</h3>
-          
+
           <div className="options">
             {currentQuestion?.options?.map((option, index) => (
               <div
@@ -322,10 +324,10 @@ const Evaluation = ({ selectedPrerequisites, onEvaluationComplete, onBack }) => 
               disabled={!selectedAnswer}
               className="next-button"
             >
-              {currentQuestionIndex < questions.length - 1 
-                ? 'Next Question' 
-                : currentTopicIndex < prerequisitesArray.length - 1 
-                  ? 'Next Topic' 
+              {currentQuestionIndex < questions.length - 1
+                ? 'Next Question'
+                : currentTopicIndex < prerequisitesArray.length - 1
+                  ? 'Next Topic'
                   : 'Complete Evaluation'
               }
             </button>

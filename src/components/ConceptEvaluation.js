@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  generateConceptMCQQuestions, 
+import {
+  generateConceptMCQQuestions,
   generateConceptEvaluationReport,
-  calculateEvaluationResults 
+  calculateEvaluationResults
 } from '../lib/learningFramework';
 import './Evaluation.css'; // Reusing existing styles
+import checkIcon from '../assets/icons/green-tick.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
 
-const ConceptEvaluation = ({ 
-  selectedConcepts, 
-  onEvaluationComplete, 
-  onBack, 
+const ConceptEvaluation = ({
+  selectedConcepts,
+  onEvaluationComplete,
+  onBack,
   contextType = "core", // "prerequisite" or "core"
   title = "Concept Evaluation"
 }) => {
@@ -82,7 +84,7 @@ const ConceptEvaluation = ({
 
   const completeEvaluationWithAnswers = async (finalAnswers) => {
     setLoading(true);
-    
+
     // Calculate results using the final answers
     const results = calculateEvaluationResults(finalAnswers, conceptsArray, 4);
     setEvaluationResults(results);
@@ -108,7 +110,7 @@ const ConceptEvaluation = ({
   };
 
   const handleProceedToLearning = () => {
-    const conceptsToLearn = conceptsArray.filter(concept => 
+    const conceptsToLearn = conceptsArray.filter(concept =>
       !evaluationResults[concept]?.passed
     );
     onEvaluationComplete(conceptsToLearn, evaluationResults);
@@ -125,21 +127,21 @@ const ConceptEvaluation = ({
       <div className="evaluation-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
         <h1 className="title">Grasphopper</h1>
-        
+
         <div className="loading">
           <div className="loading-spinner"></div>
           <p>Generating {contextType} evaluation questions...</p>
@@ -153,16 +155,16 @@ const ConceptEvaluation = ({
       <div className="evaluation-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
@@ -181,7 +183,7 @@ const ConceptEvaluation = ({
                       {result.correct}/{result.total}
                     </div>
                     <div className="status">
-                      {result.passed ? '✓ Passed' : '✗ Failed'}
+                      {result.passed ? <img src={checkIcon} alt="Passed" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> : <img src={logoutIcon} alt="Failed" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} />} {result.passed ? 'Passed' : 'Failed'}
                     </div>
                   </div>
                 );
@@ -201,7 +203,7 @@ const ConceptEvaluation = ({
                 <h3>General Remark</h3>
                 <p>{report.remark}</p>
               </div>
-              
+
               {report.recommendations && report.recommendations.length > 0 && (
                 <div className="recommendations">
                   <h3>Recommendations</h3>
@@ -228,16 +230,16 @@ const ConceptEvaluation = ({
     <div className="evaluation-container">
       <div className="nav-menu" onClick={onBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </div>
-      
+
       <div className="nav-profile">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       </div>
 
@@ -247,14 +249,14 @@ const ConceptEvaluation = ({
         <div className="quiz-header">
           <h2>Quiz • {currentConcept}</h2>
           <div className="progress">
-            Question {currentQuestionIndex + 1} of {questions.length} • 
+            Question {currentQuestionIndex + 1} of {questions.length} •
             {contextType === 'core' ? 'Core Concept' : 'Concept'} {currentConceptIndex + 1} of {conceptsArray.length}
           </div>
         </div>
 
         <div className="question-card">
           <h3>{currentQuestionIndex + 1}. {currentQuestion?.question}</h3>
-          
+
           <div className="options">
             {currentQuestion?.options?.map((option, index) => (
               <div
@@ -274,10 +276,10 @@ const ConceptEvaluation = ({
               disabled={!selectedAnswer}
               className="next-button"
             >
-              {currentQuestionIndex < questions.length - 1 
-                ? 'Next Question' 
-                : currentConceptIndex < conceptsArray.length - 1 
-                  ? 'Next Concept' 
+              {currentQuestionIndex < questions.length - 1
+                ? 'Next Question'
+                : currentConceptIndex < conceptsArray.length - 1
+                  ? 'Next Concept'
                   : 'Complete Evaluation'
               }
             </button>

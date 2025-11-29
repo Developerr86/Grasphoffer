@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getMostStruggledTopics, getOverallStruggleStats } from '../lib/topicStruggleService';
 import './EvaluationReport.css';
+import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
 
 /**
  * Evaluation Report Component
@@ -25,7 +30,7 @@ const EvaluationReport = ({
     const loadStruggleData = async () => {
       try {
         setLoading(true);
-        
+
         const [topicsResult, statsResult] = await Promise.all([
           getMostStruggledTopics(5),
           getOverallStruggleStats()
@@ -67,7 +72,7 @@ const EvaluationReport = ({
     <div className="evaluation-report">
       <div className="report-header">
         <div className="result-icon">
-          {passed ? '🎉' : '📚'}
+          {passed ? <img src={targetIcon} alt="Congrats" style={{ width: '64px', height: '64px' }} /> : <img src={treeIcon} alt="Study" style={{ width: '64px', height: '64px' }} />}
         </div>
         <h1>Evaluation Report</h1>
         <div className="overall-score">
@@ -83,7 +88,7 @@ const EvaluationReport = ({
       <div className="report-content">
         {/* Summary Section */}
         <div className="summary-section">
-          <h2>📊 Performance Summary</h2>
+          <h2><img src={targetIcon} alt="Summary" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> Performance Summary</h2>
           <div className="summary-grid">
             <div className="summary-card correct">
               <div className="summary-number">{correctAnswers}</div>
@@ -98,7 +103,7 @@ const EvaluationReport = ({
               <div className="summary-label">Accuracy</div>
             </div>
             <div className={`summary-card result ${passed ? 'passed' : 'failed'}`}>
-              <div className="summary-number">{passed ? '✅' : '❌'}</div>
+              <div className="summary-number">{passed ? <img src={checkIcon} alt="Passed" style={{ width: '32px', height: '32px' }} /> : <img src={logoutIcon} alt="Failed" style={{ width: '32px', height: '32px' }} />}</div>
               <div className="summary-label">{passed ? 'Passed' : 'Failed'}</div>
             </div>
           </div>
@@ -107,25 +112,25 @@ const EvaluationReport = ({
         {/* Wrong Answers Review Section */}
         {wrongQuestions.length > 0 && (
           <div className="wrong-answers-section">
-            <h2>🔍 Review Wrong Answers</h2>
+            <h2><img src={targetIcon} alt="Review" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> Review Wrong Answers</h2>
             <div className="review-navigation">
               <span className="review-counter">
                 Question {currentReviewIndex + 1} of {wrongQuestions.length} wrong answers
               </span>
               <div className="review-controls">
-                <button 
+                <button
                   onClick={() => setCurrentReviewIndex(Math.max(0, currentReviewIndex - 1))}
                   disabled={currentReviewIndex === 0}
                   className="nav-button prev"
                 >
-                  ← Previous
+                  Previous
                 </button>
-                <button 
+                <button
                   onClick={() => setCurrentReviewIndex(Math.min(wrongQuestions.length - 1, currentReviewIndex + 1))}
                   disabled={currentReviewIndex === wrongQuestions.length - 1}
                   className="nav-button next"
                 >
-                  Next →
+                  Next
                 </button>
               </div>
             </div>
@@ -139,14 +144,14 @@ const EvaluationReport = ({
 
                 <div className="answers-comparison">
                   <div className="answer-section your-answer">
-                    <h4>❌ Your Answer:</h4>
+                    <h4><img src={logoutIcon} alt="Wrong" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Your Answer:</h4>
                     <div className="answer-option wrong">
                       {userAnswers[questions.indexOf(currentWrongQuestion)]}
                     </div>
                   </div>
 
                   <div className="answer-section correct-answer">
-                    <h4>✅ Correct Answer:</h4>
+                    <h4><img src={checkIcon} alt="Correct" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Correct Answer:</h4>
                     <div className="answer-option correct">
                       {currentWrongQuestion.correctAnswer}
                     </div>
@@ -154,12 +159,12 @@ const EvaluationReport = ({
                 </div>
 
                 <div className="explanation-section">
-                  <h4>💡 Explanation:</h4>
+                  <h4><img src={targetIcon} alt="Explanation" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Explanation:</h4>
                   <div className="explanation-content">
-                    {currentWrongQuestion.explanation || 
-                     `The correct answer is "${currentWrongQuestion.correctAnswer}". This is a fundamental concept that requires understanding of the core principles.`}
+                    {currentWrongQuestion.explanation ||
+                      `The correct answer is "${currentWrongQuestion.correctAnswer}". This is a fundamental concept that requires understanding of the core principles.`}
                   </div>
-                  
+
                   {currentWrongQuestion.whyWrongExplanation && (
                     <div className="why-wrong-explanation">
                       <h5>Why your answer was wrong:</h5>
@@ -182,7 +187,7 @@ const EvaluationReport = ({
         {/* Topic Struggles Section */}
         {!loading && struggledTopics.length > 0 && (
           <div className="struggles-section">
-            <h2>📈 Your Learning Insights</h2>
+            <h2><img src={targetIcon} alt="Insights" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> Your Learning Insights</h2>
             <div className="struggles-content">
               <h3>Topics you struggle with most:</h3>
               <div className="struggles-list">
@@ -192,13 +197,13 @@ const EvaluationReport = ({
                     <div className="struggle-info">
                       <div className="struggle-topic">{topic.topic_name}</div>
                       <div className="struggle-stats">
-                        {topic.struggle_count} mistakes out of {topic.total_attempts} attempts 
+                        {topic.struggle_count} mistakes out of {topic.total_attempts} attempts
                         ({topic.struggle_percentage}% error rate)
                       </div>
                     </div>
                     <div className="struggle-bar">
-                      <div 
-                        className="struggle-fill" 
+                      <div
+                        className="struggle-fill"
                         style={{ width: `${topic.struggle_percentage}%` }}
                       ></div>
                     </div>
@@ -233,15 +238,15 @@ const EvaluationReport = ({
         <div className="report-actions">
           {!passed && onRetry && (
             <button onClick={onRetry} className="action-button retry">
-              🔄 Retry Assessment
+              <img src={targetIcon} alt="Retry" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Retry Assessment
             </button>
           )}
           <button onClick={onContinue} className="action-button continue">
-            {passed ? '✅ Continue Learning' : '📚 Study More'}
+            {passed ? <span><img src={checkIcon} alt="Continue" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Continue Learning</span> : <span><img src={treeIcon} alt="Study" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Study More</span>}
           </button>
           {onOpenTheHopper && (
             <button onClick={onOpenTheHopper} className="action-button hopper">
-              🦗 Hopper Explain
+              <img src={hopperIcon} alt="Hopper" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Hopper Explain
             </button>
           )}
         </div>

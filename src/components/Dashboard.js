@@ -6,68 +6,67 @@ import { getDisplayName } from '../lib/userProfileService';
 import TopicInput from './TopicInput';
 import FileUpload from './FileUpload';
 import SessionTypeSelector from './SessionTypeSelector';
+import NeoButton from './ui/NeoButton';
+import NeoCard from './ui/NeoCard';
+import NeoBadge from './ui/NeoBadge';
 import './Dashboard.css';
+
+// Icons
+import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
+import homeIcon from '../assets/icons/home.png';
+import userIcon from '../assets/icons/User_icon.PNG';
+import podcastIcon from '../assets/icons/podcast.png';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+import boltIcon from '../assets/icons/Lightning-bolt.PNG';
+import stopwatchIcon from '../assets/icons/Stop_watch-logo.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
 
 const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodcasts }) => {
   const { user, signOut } = useAuth();
-  const [inputMethod, setInputMethod] = useState('topic'); // 'topic' or 'files'
-  const [displayName, setDisplayName] = useState(''); // full_name or email
-  const [sessionType, setSessionType] = useState('fast'); // 'fast' or 'depth'
-  const [currentStep, setCurrentStep] = useState('dashboard'); // 'dashboard', 'input-method', 'session-type', 'ready'
+  const [inputMethod, setInputMethod] = useState('topic');
+  const [displayName, setDisplayName] = useState('');
+  const [sessionType, setSessionType] = useState('fast');
+  const [currentStep, setCurrentStep] = useState('dashboard');
   const [recentSessions, setRecentSessions] = useState([]);
 
-  // Handle topic submission
+  // ... (Keep existing logic functions: handleTopicSubmit, handleFilesSubmit, etc.)
   const handleTopicSubmit = (topic) => {
     console.log('Topic submitted:', topic);
     setCurrentStep('session-type');
-    // Store the topic for later use
     window.selectedTopic = topic;
   };
 
-  // Handle files submission
   const handleFilesSubmit = async (filesData) => {
     console.log('Files submitted:', filesData);
-    
-    // If we have processed markdown content, detect the topic
     if (filesData.hasProcessedContent && filesData.markdownContent) {
       try {
-        // Show loading state (you could add a loading state here)
         console.log('Detecting topic from uploaded content...');
-        
-        // Detect topic from the markdown content
         const topicInfo = await detectTopicFromContent(filesData.markdownContent);
         console.log('Detected topic:', topicInfo);
-        
-        // Store both the files data and detected topic
         window.selectedFiles = {
           ...filesData,
           detectedTopic: topicInfo.topic,
           topicInfo: topicInfo
         };
-        
-        // Store the detected topic for learning session
         window.selectedTopic = topicInfo.topic;
       } catch (error) {
         console.error('Error detecting topic:', error);
-        // Fallback to generic topic
         window.selectedFiles = filesData;
         window.selectedTopic = 'Uploaded Content';
       }
     } else {
-      // No processed content, use generic topic
       window.selectedFiles = filesData;
       window.selectedTopic = 'Uploaded Content';
     }
-    
     setCurrentStep('session-type');
   };
 
-  // Handle session type selection
   const handleSessionTypeChange = (type) => {
     setSessionType(type);
   };
 
-  // Handle starting the learning session
   const handleStartLearning = () => {
     if (inputMethod === 'topic' && window.selectedTopic) {
       onStartLearning && onStartLearning({
@@ -75,9 +74,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
         topic: window.selectedTopic
       });
     } else if (inputMethod === 'files' && window.selectedFiles) {
-      // Use the detected topic or fallback topic
       const topic = window.selectedFiles.detectedTopic || window.selectedTopic || 'Uploaded Content';
-      
       onStartLearning && onStartLearning({
         type: sessionType,
         topic: topic,
@@ -88,15 +85,11 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
     }
   };
 
-  // Load dashboard data
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        // Load display name
         const name = await getDisplayName();
         setDisplayName(name);
-
-        // Load recent sessions
         const result = await getRecentSessions(10);
         if (result.success) {
           setRecentSessions(result.sessions);
@@ -107,23 +100,17 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
         console.error('Error loading dashboard data:', error);
       }
     };
-
     if (user) {
       loadDashboardData();
     }
   }, [user]);
 
-  // Handle continuing a session
   const handleContinueSession = async (sessionId) => {
     try {
       console.log('Continuing session:', sessionId);
       const result = await getSessionResumeData(sessionId);
-
       if (result.success) {
         const resumeData = result.resumeData;
-        console.log('Resume data:', resumeData);
-
-        // Navigate to appropriate learning session with resume data
         onStartLearning && onStartLearning({
           type: resumeData.sessionType,
           topic: resumeData.topic,
@@ -131,7 +118,6 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
         });
       } else {
         console.error('Failed to get resume data:', result.error);
-        // Could show a toast notification here
         alert('Failed to continue session. Please try again.');
       }
     } catch (error) {
@@ -140,349 +126,254 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
     }
   };
 
-
-
   return (
-    <div className="modern-dashboard">
+    <div className="dashboard-container">
       {/* Sidebar Navigation */}
-      <aside className="sidebar">
+      <aside className="dashboard-sidebar">
         <div className="sidebar-header">
-          <div className="logo">
-            <span className="logo-icon">🧞‍♂️</span>
+          <div className="logo-container">
+            <img src={hopperIcon} alt="Grasphopper" className="logo-icon" style={{ width: '32px', height: '32px' }} />
             <span className="logo-text">Grasphopper</span>
           </div>
         </div>
 
         <nav className="sidebar-nav">
-          <div className="nav-item active">
-            <span className="nav-icon">🏠</span>
-            <span className="nav-text">Dashboard</span>
-          </div>
-          <div className="nav-item" onClick={onOpenProfile}>
-            <span className="nav-icon">👤</span>
-            <span className="nav-text">Profile</span>
-          </div>
-          <div className="nav-item" onClick={onOpenTheHopper}>
-            <span className="nav-icon">🦗</span>
-            <span className="nav-text">Ask TheHopper</span>
-          </div>
-          <div className="nav-item" onClick={onOpenPodcasts}>
-            <span className="nav-icon">🎙️</span>
-            <span className="nav-text">Podcasts</span>
-          </div>
+          <NeoButton variant="ghost" className="neo-btn-full !justify-start" onClick={() => setCurrentStep('dashboard')}>
+            <div className="nav-btn-content">
+              <img src={homeIcon} alt="Dashboard" className="nav-icon" style={{ width: '24px', height: '24px' }} /> Dashboard
+            </div>
+          </NeoButton>
+          <NeoButton variant="ghost" className="neo-btn-full !justify-start" onClick={onOpenProfile}>
+            <div className="nav-btn-content">
+              <img src={userIcon} alt="Profile" className="nav-icon" style={{ width: '24px', height: '24px' }} /> Profile
+            </div>
+          </NeoButton>
+          <NeoButton variant="ghost" className="neo-btn-full !justify-start" onClick={onOpenTheHopper}>
+            <div className="nav-btn-content">
+              <img src={hopperIcon} alt="Ask TheHopper" className="nav-icon" style={{ width: '24px', height: '24px' }} /> Ask TheHopper
+            </div>
+          </NeoButton>
+          <NeoButton variant="ghost" className="neo-btn-full !justify-start" onClick={onOpenPodcasts}>
+            <div className="nav-btn-content">
+              <img src={podcastIcon} alt="Podcasts" className="nav-icon" style={{ width: '24px', height: '24px' }} /> Podcasts
+            </div>
+          </NeoButton>
         </nav>
 
         <div className="sidebar-footer">
-          <button onClick={signOut} className="signout-btn">
-            <span className="nav-icon">🚪</span>
-            <span className="nav-text">Sign Out</span>
-          </button>
+          <NeoButton variant="outline" className="neo-btn-full !justify-start sign-out-btn" onClick={signOut}>
+            <div className="nav-btn-content">
+              <img src={logoutIcon} alt="Sign Out" className="nav-icon" style={{ width: '24px', height: '24px' }} /> Sign Out
+            </div>
+          </NeoButton>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="main-content">
+      <main className="dashboard-main">
         {/* Top Header */}
-        <header className="top-header">
-          <div className="header-left">
+        <header className="dashboard-header">
+          <div>
             <h1 className="page-title">My Learning</h1>
+            <p className="welcome-text">Welcome back, {displayName || 'Student'}!</p>
           </div>
-          <div className="header-right">
-            <div className="user-avatar" onClick={onOpenProfile}>
-              <span>{(displayName || user?.email || '').charAt(0).toUpperCase()}</span>
+          <div className="user-avatar-container" onClick={onOpenProfile}>
+            <div className="user-avatar">
+              <span className="avatar-initial">{(displayName || user?.email || '').charAt(0).toUpperCase()}</span>
             </div>
           </div>
         </header>
 
         {/* Hero Section */}
         <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-text">
-              <div className="subject-tag">Physics</div>
-              <h2 className="hero-title">
-                The study of the<br />
-                structure of matter.
-              </h2>
-              <button
-                className="continue-course-btn"
-                onClick={() => setCurrentStep('input-method')}
-              >
-                <span className="play-icon">▶</span>
-                CONTINUE TO STUDY
-              </button>
-            </div>
-            <div className="hero-visual">
-              <div className="floating-elements">
-                <div className="element element-1">🧪</div>
-                <div className="element element-2">⚛️</div>
-                <div className="element element-3">🔬</div>
+          <NeoCard padding="large">
+            <div className="hero-card-content">
+              <div className="hero-text-content">
+                <div className="hero-badge">
+                  <NeoBadge variant="secondary">Physics</NeoBadge>
+                </div>
+                <h2 className="hero-title">
+                  The study of the<br />
+                  structure of matter.
+                </h2>
+                <NeoButton size="large" onClick={() => setCurrentStep('input-method')}>
+                  CONTINUE TO STUDY
+                </NeoButton>
+              </div>
+              <div className="hero-visual">
+                <div className="hero-icon-1"><img src={treeIcon} alt="Science" style={{ width: '80px', height: '80px' }} /></div>
+                <div className="hero-icon-2"><img src={boltIcon} alt="Physics" style={{ width: '64px', height: '64px' }} /></div>
               </div>
             </div>
-          </div>
+          </NeoCard>
         </section>
 
         {/* Content Grid */}
-        <div className="content-grid">
-          {/* Left Column */}
-          <div className="left-column">
-            {/* Learning Sessions Section */}
-            <section className="sessions-section">
-              <div className="section-header">
-                <h3>Course you're taking</h3>
-              </div>
+        <div className="dashboard-grid">
+          {/* Left Column - Sessions */}
+          <div className="sessions-column">
+            <div className="section-header">
+              <h3 className="section-title">Course you're taking</h3>
+            </div>
 
-              <div className="sessions-list">
-                {recentSessions.length > 0 ? (
-                  recentSessions.slice(0, 4).map((session) => (
-                    <div key={session.id} className="session-item">
-                      <div className="session-icon">
-                        {session.session_type === 'fast' ? '⚡' : '🌳'}
+            <div className="sessions-list">
+              {recentSessions.length > 0 ? (
+                recentSessions.slice(0, 4).map((session) => (
+                  <NeoCard key={session.id} padding="medium" hoverEffect>
+                    <div className="session-item-content">
+                      <div className="session-icon-box">
+                        <img src={session.session_type === 'fast' ? boltIcon : treeIcon} alt={session.session_type} style={{ width: '32px', height: '32px' }} />
                       </div>
-                      <div className="session-details">
-                        <h4>{session.topic}</h4>
-                        <div className="session-progress">
-                          <span className="hours-spent">
-                            {session.studied_flashcards || 0} flashcards studied
-                          </span>
-                          <div className="progress-bar">
+                      <div className="session-info">
+                        <h4 className="session-topic">{session.topic}</h4>
+                        <div className="session-progress-container">
+                          <div className="progress-track">
                             <div
                               className="progress-fill"
-                              style={{
-                                width: `${session.total_flashcards > 0 ?
-                                  (session.studied_flashcards / session.total_flashcards) * 100 : 0}%`
-                              }}
+                              style={{ width: `${session.total_flashcards > 0 ? (session.studied_flashcards / session.total_flashcards) * 100 : 0}%` }}
                             ></div>
                           </div>
-                          <span className="progress-percent">
-                            {session.total_flashcards > 0 ?
-                              Math.round((session.studied_flashcards / session.total_flashcards) * 100) : 0}%
+                          <span className="progress-text">
+                            {session.total_flashcards > 0 ? Math.round((session.studied_flashcards / session.total_flashcards) * 100) : 0}%
                           </span>
                         </div>
                       </div>
                       {(() => {
-                        // Calculate actual progress percentage
-                        const progressPercent = session.total_flashcards > 0 ?
-                          Math.round((session.studied_flashcards / session.total_flashcards) * 100) : 0;
-                        const isCompleted = progressPercent === 100;
-
-                        return (
-                          <div className={`session-status-badge ${isCompleted ? 'completed' : 'in-progress'}`}>
-                            {isCompleted ? 'Completed' : 'In progress'}
-                          </div>
-                        );
-                      })()}
-
-                      {/* Continue button for sessions that are not 100% complete */}
-                      {(() => {
-                        const progressPercent = session.total_flashcards > 0 ?
-                          Math.round((session.studied_flashcards / session.total_flashcards) * 100) : 0;
-
-                        // Show continue button only if progress is less than 100%
-                        return progressPercent < 100 && (
-                          <button
-                            className="continue-session-btn"
-                            onClick={() => handleContinueSession(session.id)}
-                          >
-                            <span className="continue-icon">▶️</span>
+                        const progressPercent = session.total_flashcards > 0 ? Math.round((session.studied_flashcards / session.total_flashcards) * 100) : 0;
+                        return progressPercent < 100 ? (
+                          <NeoButton size="small" variant="secondary" onClick={() => handleContinueSession(session.id)}>
                             Continue
-                          </button>
+                          </NeoButton>
+                        ) : (
+                          <NeoBadge variant="primary">Completed</NeoBadge>
                         );
                       })()}
                     </div>
-                  ))
-                ) : (
-                  <div className="empty-state">
-                    <p>No learning sessions yet</p>
-                    <button
-                      onClick={() => setCurrentStep('input-method')}
-                      className="start-first-session"
-                    >
-                      Start your first session
-                    </button>
-                  </div>
-                )}
-              </div>
-            </section>
+                  </NeoCard>
+                ))
+              ) : (
+                <NeoCard className="empty-state">
+                  <p className="empty-text">No learning sessions yet</p>
+                  <NeoButton onClick={() => setCurrentStep('input-method')}>
+                    Start your first session
+                  </NeoButton>
+                </NeoCard>
+              )}
+            </div>
           </div>
 
-          {/* Right Column */}
-          <div className="right-column">
-            {/* Progress Section */}
-            <section className="progress-section">
-              <div className="section-header">
-                <h3>My Progress</h3>
-              </div>
+          {/* Right Column - Progress */}
+          <div className="stats-column">
+            <h3 className="section-title">My Progress</h3>
 
-              {/* Study Time Card */}
-              <div className="progress-card">
-                <div className="card-header">
-                  <span>Track your study time</span>
-                  <span className="info-icon">ℹ️</span>
-                </div>
-                <div className="study-time">
-                  <div className="time-display">
-                    <span className="time-number">124</span>
-                    <span className="time-label">Hours</span>
-                  </div>
-                  <div className="time-chart">
-                    {/* Simple bar chart representation */}
-                    <div className="chart-bars">
-                      <div className="bar" style={{height: '20%'}}></div>
-                      <div className="bar" style={{height: '40%'}}></div>
-                      <div className="bar" style={{height: '60%'}}></div>
-                      <div className="bar" style={{height: '80%'}}></div>
-                      <div className="bar" style={{height: '100%'}}></div>
-                      <div className="bar" style={{height: '70%'}}></div>
-                      <div className="bar" style={{height: '50%'}}></div>
-                    </div>
-                  </div>
-                </div>
+            <NeoCard className="bg-yellow">
+              <div className="stat-card-header">
+                <span className="stat-label">Study Time</span>
+                <span className="stat-icon"><img src={stopwatchIcon} alt="Time" style={{ width: '32px', height: '32px' }} /></span>
               </div>
+              <div className="stat-value">124 <span className="stat-unit">Hours</span></div>
+              <div className="chart-bars">
+                {[40, 70, 50, 90, 60, 80, 100].map((h, i) => (
+                  <div key={i} className="chart-bar" style={{ height: `${h}%`, opacity: 0.2 + (i * 0.1) }}></div>
+                ))}
+              </div>
+            </NeoCard>
 
-              {/* Sessions Completed Card */}
-              <div className="progress-card purple">
-                <div className="card-header">
-                  <span>Sessions completed</span>
-                  <span className="info-icon">ℹ️</span>
-                </div>
-                <div className="completion-number">
-                  {recentSessions.filter(s => {
-                    // Check both status and progress completion
-                    const progressPercent = s.total_flashcards > 0 ?
-                      Math.round((s.studied_flashcards / s.total_flashcards) * 100) : 0;
-                    return s.status === 'completed' || progressPercent === 100;
-                  }).length}
-                </div>
+            <NeoCard className="bg-purple">
+              <div className="stat-card-header">
+                <span className="stat-label">Sessions Completed</span>
+                <span className="stat-icon"><img src={checkIcon} alt="Completed" style={{ width: '32px', height: '32px' }} /></span>
               </div>
+              <div className="stat-value">
+                {recentSessions.filter(s => {
+                  const progressPercent = s.total_flashcards > 0 ? Math.round((s.studied_flashcards / s.total_flashcards) * 100) : 0;
+                  return s.status === 'completed' || progressPercent === 100;
+                }).length}
+              </div>
+            </NeoCard>
 
-              {/* Performance Card */}
-              <div className="progress-card">
-                <div className="card-header">
-                  <span>Performance</span>
-                  <span className="info-icon">ℹ️</span>
-                </div>
-                <div className="performance-content">
-                  <div className="performance-score">
-                    {(() => {
-                      const sessionsWithScores = recentSessions.filter(s => s.final_score !== null && s.final_score !== undefined);
-                      if (sessionsWithScores.length === 0) return '0';
-                      const average = sessionsWithScores.reduce((sum, s) => sum + s.final_score, 0) / sessionsWithScores.length;
-                      return Math.round(average);
-                    })()}%
-                  </div>
-                  <div className="performance-chart">
-                    {/* Performance trend line */}
-                    <svg viewBox="0 0 100 40" className="trend-line">
-                      <path d="M10,30 Q30,20 50,15 T90,10" stroke="#8b5cf6" strokeWidth="2" fill="none"/>
-                    </svg>
-                  </div>
-                </div>
+            <NeoCard>
+              <div className="stat-card-header">
+                <span className="stat-label">Avg. Score</span>
+                <span className="stat-icon"><img src={targetIcon} alt="Score" style={{ width: '32px', height: '32px' }} /></span>
               </div>
-
-              {/* Complete Tests Card */}
-              <div className="progress-card purple">
-                <div className="card-header">
-                  <span>Complete tests</span>
-                  <span className="info-icon">ℹ️</span>
-                </div>
-                <div className="completion-number">
-                  {recentSessions.filter(s => {
-                    // Count sessions that have completed evaluations (have questions and final scores)
-                    return s.total_questions > 0 && (s.status === 'completed' || s.final_score !== null);
-                  }).length}
-                </div>
+              <div className="stat-value">
+                {(() => {
+                  const sessionsWithScores = recentSessions.filter(s => s.final_score !== null && s.final_score !== undefined);
+                  if (sessionsWithScores.length === 0) return '0';
+                  const average = sessionsWithScores.reduce((sum, s) => sum + s.final_score, 0) / sessionsWithScores.length;
+                  return Math.round(average);
+                })()}%
               </div>
-            </section>
+            </NeoCard>
           </div>
         </div>
 
-        {/* Input Method Modal */}
+        {/* Modals */}
         {currentStep === 'input-method' && (
           <div className="modal-overlay">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h2>How would you like to start learning?</h2>
-                <button
-                  className="close-modal"
-                  onClick={() => setCurrentStep('dashboard')}
-                >
-                  ×
-                </button>
-              </div>
+            <div className="modal-container">
+              <NeoCard padding="large">
+                <div className="modal-header">
+                  <h2 className="modal-title">Start Learning</h2>
+                  <button onClick={() => setCurrentStep('dashboard')} className="close-modal-btn">×</button>
+                </div>
 
-              <div className="input-method-selection">
-                <div className="method-selector">
+                <div className="input-method-grid">
                   <button
-                    className={`method-option ${inputMethod === 'topic' ? 'selected' : ''}`}
+                    className={`method-btn ${inputMethod === 'topic' ? 'selected-topic' : ''}`}
                     onClick={() => setInputMethod('topic')}
                   >
-                    <span className="method-icon">📝</span>
-                    <span className="method-text">Enter Topic</span>
+                    <span className="method-icon"><img src={targetIcon} alt="Topic" style={{ width: '40px', height: '40px' }} /></span>
+                    <span className="method-label">Enter Topic</span>
                   </button>
                   <button
-                    className={`method-option ${inputMethod === 'files' ? 'selected' : ''}`}
+                    className={`method-btn ${inputMethod === 'files' ? 'selected-files' : ''}`}
                     onClick={() => setInputMethod('files')}
                   >
-                    <span className="method-icon">📁</span>
-                    <span className="method-text">Upload Files</span>
+                    <span className="method-icon"><img src={treeIcon} alt="Files" style={{ width: '40px', height: '40px' }} /></span>
+                    <span className="method-label">Upload Files</span>
                   </button>
                 </div>
 
-                <div className="selected-method-content">
-                  {inputMethod === 'topic' && (
-                    <TopicInput onTopicSubmit={handleTopicSubmit} />
-                  )}
-                  {inputMethod === 'files' && (
-                    <FileUpload onFilesSubmit={handleFilesSubmit} />
-                  )}
+                <div>
+                  {inputMethod === 'topic' && <TopicInput onTopicSubmit={handleTopicSubmit} />}
+                  {inputMethod === 'files' && <FileUpload onFilesSubmit={handleFilesSubmit} />}
                 </div>
-              </div>
+              </NeoCard>
             </div>
           </div>
         )}
 
-        {/* Session Type Modal */}
         {currentStep === 'session-type' && (
           <div className="modal-overlay">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h2>Choose Your Learning Style</h2>
-                <button
-                  className="close-modal"
-                  onClick={() => setCurrentStep('dashboard')}
-                >
-                  ×
-                </button>
-              </div>
-
-              {window.selectedFiles?.detectedTopic && (
-                <div className="detected-topic-info">
-                  <h3>Detected Topic: {window.selectedFiles.detectedTopic}</h3>
-                  {window.selectedFiles.topicInfo?.description && (
-                    <p>{window.selectedFiles.topicInfo.description}</p>
-                  )}
-                  {window.selectedFiles.topicInfo?.subtopics && window.selectedFiles.topicInfo.subtopics.length > 0 && (
-                    <div className="subtopics">
-                      <strong>Key areas:</strong> {window.selectedFiles.topicInfo.subtopics.join(', ')}
-                    </div>
-                  )}
+            <div className="modal-container">
+              <NeoCard padding="large">
+                <div className="modal-header">
+                  <h2 className="modal-title">Choose Style</h2>
+                  <button onClick={() => setCurrentStep('dashboard')} className="close-modal-btn">×</button>
                 </div>
-              )}
 
-              <SessionTypeSelector
-                selectedType={sessionType}
-                onTypeChange={handleSessionTypeChange}
-              />
+                {window.selectedFiles?.detectedTopic && (
+                  <div className="detected-topic-box">
+                    <h3 className="detected-topic-title">Topic: {window.selectedFiles.detectedTopic}</h3>
+                    {window.selectedFiles.topicInfo?.description && (
+                      <p className="detected-topic-desc">{window.selectedFiles.topicInfo.description}</p>
+                    )}
+                  </div>
+                )}
 
-              <div className="start-session-section">
-                <button
-                  className="start-session-button"
-                  onClick={handleStartLearning}
-                  disabled={!sessionType}
-                >
-                  Start {sessionType === 'fast' ? 'Fast' : 'Depth'} Learning Session
-                </button>
-              </div>
+                <SessionTypeSelector
+                  selectedType={sessionType}
+                  onTypeChange={handleSessionTypeChange}
+                />
+
+                <div className="modal-footer">
+                  <NeoButton size="large" onClick={handleStartLearning} disabled={!sessionType} fullWidth>
+                    Start {sessionType === 'fast' ? 'Fast' : 'Depth'} Learning Session
+                  </NeoButton>
+                </div>
+              </NeoCard>
             </div>
           </div>
         )}

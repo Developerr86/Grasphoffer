@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
 import FileProcessor from './FileProcessor';
 import './FileUpload.css';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
 
 const FileUpload = ({ onFilesSubmit, disabled = false }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -64,7 +67,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const files = Array.from(e.dataTransfer.files);
       handleFileUpload(files);
@@ -87,7 +90,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
     // Extract successfully processed files
     let processedFiles = [];
     let combinedMarkdown = '';
-    
+
     // Check if we have multiple files processed
     if (processingResults.results && Array.isArray(processingResults.results)) {
       // Multiple files
@@ -98,16 +101,16 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
       processedFiles = [processingResults];
       combinedMarkdown = processingResults.markdownContent || '';
     }
-    
+
     if (processedFiles.length > 0) {
       // Store processed files with their markdown content
       const filesWithContent = processedFiles.map(file => ({
         ...file,
         markdownContent: file.markdownContent || file.extractedText
       }));
-      
+
       setUploadedFiles(prev => [...prev, ...filesWithContent]);
-      
+
       // Store combined markdown for later use
       window.processedMarkdown = combinedMarkdown || processedFiles[0].markdownContent;
     }
@@ -127,7 +130,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
   // Handle main submission
   const handleSubmit = async () => {
     const hasContent = uploadedFiles.length > 0 || attachedLinks.length > 0;
-    
+
     if (hasContent && onFilesSubmit) {
       // Prepare the submission data
       const submissionData = {
@@ -136,7 +139,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
         markdownContent: window.processedMarkdown || null,
         hasProcessedContent: !!window.processedMarkdown
       };
-      
+
       // Call the parent handler
       onFilesSubmit(submissionData);
     }
@@ -158,13 +161,13 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
     <div className="file-upload-container">
       <div className="input-method-card">
         <div className="input-method-header">
-          <div className="input-method-icon">📁</div>
+          <div className="input-method-icon"><img src={treeIcon} alt="Files" style={{ width: '48px', height: '48px' }} /></div>
           <h3>Upload Files</h3>
           <p>Upload documents, images, or add links to learn from</p>
         </div>
 
         {/* Drag and Drop Area */}
-        <div 
+        <div
           className={`file-drop-zone ${dragActive ? 'drag-active' : ''}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -173,7 +176,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
           onClick={handleDropZoneClick}
         >
           <div className="drop-zone-content">
-            <div className="upload-icon">📤</div>
+            <div className="upload-icon"><img src={targetIcon} alt="Upload" style={{ width: '48px', height: '48px' }} /></div>
             <p>Drag and drop files here, or click to browse</p>
             <input
               ref={fileInputRef}
@@ -219,7 +222,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
               {uploadedFiles.map((file, index) => (
                 <div key={`file-${index}`} className="attachment-item">
                   <span className="attachment-icon">
-                    {file.fileName ? '📄' : (file.type === 'application/pdf' ? '📄' : '🖼️')}
+                    {file.fileName ? <img src={treeIcon} alt="File" style={{ width: '16px', height: '16px' }} /> : (file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="Image" style={{ width: '16px', height: '16px' }} />)}
                   </span>
                   <span className="attachment-name">
                     {file.fileName || file.name}
@@ -232,25 +235,25 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
                     className="remove-attachment"
                     disabled={disabled}
                   >
-                    ✕
+                    <img src={logoutIcon} alt="Remove" style={{ width: '16px', height: '16px' }} />
                   </button>
                 </div>
               ))}
               {attachedLinks.map((link, index) => (
                 <div key={`link-${index}`} className="attachment-item">
-                  <span className="attachment-icon">🔗</span>
+                  <span className="attachment-icon"><img src={targetIcon} alt="Link" style={{ width: '16px', height: '16px' }} /></span>
                   <span className="attachment-name">{link}</span>
                   <button
                     onClick={() => removeLink(index)}
                     className="remove-attachment"
                     disabled={disabled}
                   >
-                    ✕
+                    <img src={logoutIcon} alt="Remove" style={{ width: '16px', height: '16px' }} />
                   </button>
                 </div>
               ))}
             </div>
-            
+
             <button
               onClick={handleSubmit}
               className="files-submit-button"

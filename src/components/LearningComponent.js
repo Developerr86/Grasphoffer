@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { generateFlashcards } from '../lib/gemini';
 import MagicLoader from './MagicLoader';
 import './LearningComponent.css';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
 
 const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
@@ -18,7 +20,7 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
     setIsFlipped(false);
     setCurrentCardIndex(0);
     setStudiedCards(new Set());
-    
+
     try {
       const generatedFlashcards = await generateFlashcards(currentTopic);
       setFlashcards(generatedFlashcards);
@@ -80,22 +82,22 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
       <div className="learning-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
-        
+
         <div className="nav-profile">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
 
         <h1 className="title">Grasphopper</h1>
         <div className="completion-message">
-          <h2>🎉 Congratulations!</h2>
+          <h2><img src={targetIcon} alt="Congrats" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> Congratulations!</h2>
           <p>You have successfully completed all the learning modules. You're now ready to proceed with the main topic!</p>
         </div>
       </div>
@@ -106,16 +108,16 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
     <div className="learning-container">
       <div className="nav-menu" onClick={onBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </div>
-      
+
       <div className="nav-profile">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       </div>
 
@@ -144,7 +146,7 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
             </div>
 
             <div className="flashcard-wrapper">
-              <div 
+              <div
                 className={`flashcard ${isFlipped ? 'flipped' : ''}`}
                 onClick={handleCardClick}
               >
@@ -155,7 +157,7 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
                   <div className="card-content">
                     <h3>{flashcards[currentCardIndex]?.question}</h3>
                     <div className="tap-instruction">
-                      {!isFlipped && <span>👆 Tap to reveal answer</span>}
+                      {!isFlipped && <span><img src={targetIcon} alt="Tap" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Tap to reveal answer</span>}
                     </div>
                   </div>
                 </div>
@@ -173,9 +175,9 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
             </div>
 
             <div className="flashcard-navigation">
-              <button 
-                className="nav-button" 
-                onClick={handlePrevCard} 
+              <button
+                className="nav-button"
+                onClick={handlePrevCard}
                 disabled={currentCardIndex === 0}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -183,7 +185,7 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
                 </svg>
                 Previous
               </button>
-              
+
               <div className="card-indicators">
                 {flashcards.map((_, index) => (
                   <div
@@ -194,14 +196,14 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
                       setIsFlipped(false);
                     }}
                   >
-                    {studiedCards.has(index) && <span className="tick-mark">✓</span>}
+                    {studiedCards.has(index) && <span className="tick-mark"><img src={checkIcon} alt="Done" style={{ width: '16px', height: '16px' }} /></span>}
                   </div>
                 ))}
               </div>
-              
-              <button 
-                className="nav-button" 
-                onClick={handleNextCard} 
+
+              <button
+                className="nav-button"
+                onClick={handleNextCard}
                 disabled={currentCardIndex === flashcards.length - 1}
               >
                 Next
@@ -215,7 +217,7 @@ const LearningComponent = ({ topicsToLearn, onComplete, onBack }) => {
               {allCardsStudied ? (
                 <div className="completion-actions">
                   <div className="completion-message">
-                    <span className="check-icon">✅</span>
+                    <span className="check-icon"><img src={checkIcon} alt="Done" style={{ width: '32px', height: '32px' }} /></span>
                     <span>Topic completed! All flashcards studied.</span>
                   </div>
                   <div className="action-buttons">

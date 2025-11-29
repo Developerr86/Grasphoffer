@@ -13,7 +13,7 @@ import MagicLoader from './components/MagicLoader';
 // Loading component with dashboard theme
 const Loading = () => (
   <div className="loading-container">
-    <MagicLoader size={120} particleCount={2} speed={1.2} hueRange={[200, 280]} />
+    <MagicLoader size={120} particleCount={2} speed={1.2} hueRange={[45, 140]} />
     <p>Loading...</p>
   </div>
 );
