@@ -3,6 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { getUserTopics, generatePodcastScript, generatePodcastAudio } from '../lib/podcastService';
 import './PodcastPage.css';
 
+// Icons
+import podcastIcon from '../assets/icons/podcast.png';
+import stopwatchIcon from '../assets/icons/Stop_watch-logo.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
+import homeIcon from '../assets/icons/home.png';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+
 const PodcastPage = ({ onBack }) => {
   const { user } = useAuth();
   const [topics, setTopics] = useState([]);
@@ -24,7 +32,7 @@ const PodcastPage = ({ onBack }) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       if (!user?.id) {
         setError('User not authenticated');
         return;
@@ -32,11 +40,11 @@ const PodcastPage = ({ onBack }) => {
 
       const userTopics = await getUserTopics(user.id);
       setTopics(userTopics);
-      
+
       if (userTopics.length === 0) {
         setError('No topics found. Complete some learning sessions or upload documents first.');
       }
-      
+
     } catch (error) {
       console.error('Error loading topics:', error);
       setError('Failed to load topics. Please try again.');
@@ -58,27 +66,27 @@ const PodcastPage = ({ onBack }) => {
     try {
       setIsGenerating(true);
       setError(null);
-      
+
       // Enhanced initial message with time estimate
-      setGenerationProgress({ 
-        progress: 5, 
-        status: '🎙️ Starting podcast generation... This may take 2-3 minutes for high-quality audio.',
+      setGenerationProgress({
+        progress: 5,
+        status: <span><img src={podcastIcon} alt="Podcast" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Starting podcast generation... This may take 2-3 minutes for high-quality audio.</span>,
         timeEstimate: 'Estimated time: 2-3 minutes'
       });
 
       // Generate script
-      setGenerationProgress({ 
-        progress: 10, 
-        status: '📝 Generating engaging podcast script with Gemini AI...',
+      setGenerationProgress({
+        progress: 10,
+        status: <span><img src={treeIcon} alt="Script" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Generating engaging podcast script with Gemini AI...</span>,
         timeEstimate: 'This step usually takes 30-60 seconds'
       });
-      
+
       const script = await generatePodcastScript(selectedTopic.title, user.id);
       setPodcastScript(script);
-      
-      setGenerationProgress({ 
-        progress: 30, 
-        status: '🎵 Script complete! Now generating professional audio with Gemini TTS...',
+
+      setGenerationProgress({
+        progress: 30,
+        status: <span><img src={podcastIcon} alt="Audio" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Script complete! Now generating professional audio with Gemini TTS...</span>,
         timeEstimate: 'Audio generation may take 1-2 minutes - please be patient'
       });
 
@@ -105,24 +113,24 @@ const PodcastPage = ({ onBack }) => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const filename = `podcast-${selectedTopic.title.replace(/[^a-zA-Z0-9]/g, '_')}-${timestamp}.wav`;
         saveAudioFile(audioResult.audioBlob, filename);
-        
-        setGenerationProgress({ 
-          progress: 98, 
-          status: '💾 Saving audio file locally...',
+
+        setGenerationProgress({
+          progress: 98,
+          status: <span><img src={targetIcon} alt="Save" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Saving audio file locally...</span>,
           timeEstimate: null
         });
-        
+
         // Small delay to show the saving message
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
-      setGenerationProgress({ 
-        progress: 100, 
-        status: '✅ Professional podcast audio ready! Click play to listen.',
+      setGenerationProgress({
+        progress: 100,
+        status: <span><img src={checkIcon} alt="Ready" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Professional podcast audio ready! Click play to listen.</span>,
         timeEstimate: null
       });
       setAudioReady(true);
-      
+
       // Clear progress after a delay
       setTimeout(() => {
         setGenerationProgress(null);
@@ -151,24 +159,24 @@ const PodcastPage = ({ onBack }) => {
 
     // Create audio element with multiple format support
     const audio = new Audio();
-    
+
     // Set up event listeners before setting src
     audio.onloadstart = () => {
       console.log('🔄 Audio loading started...');
     };
-    
+
     audio.oncanplay = () => {
       console.log('✅ Audio ready to play');
     };
-    
+
     audio.onplay = () => {
       console.log('🎙️ Podcast playback started');
     };
-    
+
     audio.onended = () => {
       console.log('🎉 Podcast playback completed');
     };
-    
+
     audio.onerror = (error) => {
       console.error('❌ Audio playback error:', error);
       console.error('Audio error details:', {
@@ -177,7 +185,7 @@ const PodcastPage = ({ onBack }) => {
         readyState: audio.readyState,
         src: audio.src
       });
-      
+
       // Try alternative playback method
       tryAlternativePlayback();
     };
@@ -192,10 +200,10 @@ const PodcastPage = ({ onBack }) => {
 
     // Store reference for stop functionality
     window.currentPodcastAudio = audio;
-    
+
     // Set the audio source
     audio.src = podcastScript.audioUrl;
-    
+
     // Attempt to play
     audio.play().catch(error => {
       console.error('❌ Failed to play audio:', error);
@@ -205,27 +213,27 @@ const PodcastPage = ({ onBack }) => {
     // Alternative playback method if main method fails
     const tryAlternativePlayback = () => {
       console.log('🔄 Trying alternative playback method...');
-      
+
       if (podcastScript.audioBlob) {
         try {
           // Create a new blob URL with different MIME type
           const alternativeBlob = new Blob([podcastScript.audioBlob], { type: 'audio/mpeg' });
           const alternativeUrl = URL.createObjectURL(alternativeBlob);
-          
+
           const alternativeAudio = new Audio(alternativeUrl);
-          
+
           alternativeAudio.oncanplay = () => {
             console.log('✅ Alternative audio method working');
           };
-          
+
           alternativeAudio.onerror = () => {
             console.error('❌ Alternative playback also failed');
             setError('Unable to play audio. The audio format may not be supported by your browser. The file has been saved locally if enabled.');
           };
-          
+
           window.currentPodcastAudio = alternativeAudio;
           alternativeAudio.play();
-          
+
         } catch (altError) {
           console.error('❌ Alternative playback method failed:', altError);
           setError('Audio playback failed. Please check if your browser supports the audio format.');
@@ -247,29 +255,29 @@ const PodcastPage = ({ onBack }) => {
   };
 
   const saveAudioFile = (audioBlob, filename) => {
-      if (!enableAudioSave) {
-        console.log('Audio saving is disabled');
-        return;
-      }
+    if (!enableAudioSave) {
+      console.log('Audio saving is disabled');
+      return;
+    }
 
-      try {
-        // Create download link
-        const url = URL.createObjectURL(audioBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        // Clean up the URL object
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        
-        console.log(`✅ Audio file saved: ${filename}`);
-      } catch (error) {
-        console.error('Error saving audio file:', error);
-      }
-    };
+    try {
+      // Create download link
+      const url = URL.createObjectURL(audioBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Clean up the URL object
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      console.log(`✅ Audio file saved: ${filename}`);
+    } catch (error) {
+      console.error('Error saving audio file:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -286,9 +294,9 @@ const PodcastPage = ({ onBack }) => {
     <div className="podcast-page">
       <header className="podcast-header">
         <button className="back-to-dashboard" onClick={onBack}>
-          ← Back to Dashboard
+          <img src={homeIcon} alt="Back" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '5px' }} /> Back to Dashboard
         </button>
-        <h1>🎙️ AI Podcast Generator</h1>
+        <h1><img src={podcastIcon} alt="Podcast" style={{ width: '40px', height: '40px', verticalAlign: 'middle' }} /> AI Podcast Generator</h1>
         <p>Turn your learning topics into engaging podcast conversations</p>
       </header>
 
@@ -330,13 +338,13 @@ const PodcastPage = ({ onBack }) => {
       ) : (
         <div className="podcast-generator">
           <div className="selected-topic">
-            <button 
+            <button
               className="back-button"
               onClick={() => setSelectedTopic(null)}
             >
               ← Back to Topics
             </button>
-            <h2>🎙️ {selectedTopic.title}</h2>
+            <h2><img src={podcastIcon} alt="Podcast" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> {selectedTopic.title}</h2>
             <p className="topic-description">
               Generate an AI podcast conversation about this topic
             </p>
@@ -353,12 +361,12 @@ const PodcastPage = ({ onBack }) => {
                   />
                   <span className="toggle-slider"></span>
                   <span className="toggle-label">
-                    💾 Save audio file locally after generation
+                    <img src={targetIcon} alt="Save" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Save audio file locally after generation
                   </span>
                 </label>
               </div>
-              
-              <button 
+
+              <button
                 className="generate-button"
                 onClick={generatePodcast}
                 disabled={isGenerating}
@@ -371,7 +379,7 @@ const PodcastPage = ({ onBack }) => {
           {generationProgress && (
             <div className="progress-container">
               <div className="progress-bar">
-                <div 
+                <div
                   className="progress-fill"
                   style={{ width: `${generationProgress.progress}%` }}
                 ></div>
@@ -379,7 +387,7 @@ const PodcastPage = ({ onBack }) => {
               <p className="progress-text">{generationProgress.status}</p>
               {generationProgress.timeEstimate && (
                 <p className="progress-time-estimate">
-                  ⏱️ {generationProgress.timeEstimate}
+                  <img src={stopwatchIcon} alt="Time" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> {generationProgress.timeEstimate}
                 </p>
               )}
               {generationProgress.currentSegment && (
@@ -388,7 +396,7 @@ const PodcastPage = ({ onBack }) => {
                 </p>
               )}
               <div className="progress-tips">
-                <p>💡 <strong>Tip:</strong> We're creating broadcast-quality audio with different voices for each speaker</p>
+                <p><img src={targetIcon} alt="Tip" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> <strong>Tip:</strong> We're creating broadcast-quality audio with different voices for each speaker</p>
               </div>
             </div>
           )}
@@ -401,8 +409,8 @@ const PodcastPage = ({ onBack }) => {
                   Estimated Duration: {podcastScript.duration}
                 </p>
                 <div className="speakers-info">
-                  <span className="speaker">🎤 {podcastScript.speakers.host}</span>
-                  <span className="speaker">🎓 {podcastScript.speakers.expert}</span>
+                  <span className="speaker"><img src={podcastIcon} alt="Host" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> {podcastScript.speakers.host}</span>
+                  <span className="speaker"><img src={treeIcon} alt="Expert" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> {podcastScript.speakers.expert}</span>
                 </div>
               </div>
 
@@ -412,13 +420,13 @@ const PodcastPage = ({ onBack }) => {
                   onClick={playPodcast}
                   disabled={!audioReady || isGenerating}
                 >
-                  ▶️ Play High-Quality Audio
+                  Play High-Quality Audio
                 </button>
-                <button 
+                <button
                   className="stop-button"
                   onClick={stopPodcast}
                 >
-                  ⏹️ Stop
+                  Stop
                 </button>
               </div>
 

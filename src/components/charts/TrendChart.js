@@ -1,5 +1,8 @@
 import React from 'react';
 import './Charts.css';
+import targetIcon from '../../assets/icons/Target-board.PNG';
+import checkIcon from '../../assets/icons/green-tick.PNG';
+import logoutIcon from '../../assets/icons/Log-Out.PNG';
 
 /**
  * Simple trend line chart component
@@ -14,7 +17,7 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
       <div className="chart-container">
         <h4 className="chart-title">{title}</h4>
         <div className="chart-empty">
-          <span>📈</span>
+          <span><img src={targetIcon} alt="Chart" style={{ width: '64px', height: '64px' }} /></span>
           <p>No data available yet</p>
         </div>
       </div>
@@ -39,7 +42,7 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
     return { x, y, ...point };
   });
 
-  const pathData = points.map((point, index) => 
+  const pathData = points.map((point, index) =>
     `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
   ).join(' ');
 
@@ -55,24 +58,24 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
         <h4 className="chart-title">{title}</h4>
         <div className={`trend-indicator trend-${trendDirection}`}>
           <span className="trend-icon">
-            {trendDirection === 'up' ? '📈' : trendDirection === 'down' ? '📉' : '➡️'}
+            {trendDirection === 'up' ? <img src={checkIcon} alt="Up" style={{ width: '24px', height: '24px' }} /> : trendDirection === 'down' ? <img src={logoutIcon} alt="Down" style={{ width: '24px', height: '24px' }} /> : <img src={targetIcon} alt="Stable" style={{ width: '24px', height: '24px' }} />}
           </span>
           <span className="trend-text">
             {trendDirection === 'up' ? '+' : trendDirection === 'down' ? '' : ''}{trendPercentage}%
           </span>
         </div>
       </div>
-      
+
       <div className="chart-content">
         <svg width={width} height={height} className="trend-svg">
           {/* Grid lines */}
           <defs>
             <linearGradient id={`gradient-${color.replace('#', '')}`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={color} stopOpacity="0.3"/>
-              <stop offset="100%" stopColor={color} stopOpacity="0.1"/>
+              <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+              <stop offset="100%" stopColor={color} stopOpacity="0.1" />
             </linearGradient>
           </defs>
-          
+
           {/* Background grid */}
           {[0, 25, 50, 75, 100].map(score => {
             const y = padding + ((maxScore - score) / scoreRange) * chartHeight;
@@ -88,13 +91,13 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
               />
             );
           })}
-          
+
           {/* Area under curve */}
           <path
             d={`${pathData} L ${points[points.length - 1].x} ${height - padding} L ${padding} ${height - padding} Z`}
             fill={`url(#gradient-${color.replace('#', '')})`}
           />
-          
+
           {/* Trend line */}
           <path
             d={pathData}
@@ -104,7 +107,7 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          
+
           {/* Data points */}
           {points.map((point, index) => (
             <circle
@@ -119,7 +122,7 @@ const TrendChart = ({ data = [], title = "Performance Trend", color = "#667eea" 
             />
           ))}
         </svg>
-        
+
         {/* Latest score display */}
         <div className="chart-stats">
           <div className="stat-item">

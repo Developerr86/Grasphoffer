@@ -1,18 +1,19 @@
 import React from 'react';
 import './SessionDebugInfo.css';
+import boltIcon from '../assets/icons/Lightning-bolt.PNG';
 
 /**
  * Debug component to show session state information
  * Only shown in development mode
  */
-const SessionDebugInfo = ({ 
-  sessionId, 
-  currentPhase, 
-  currentCardIndex, 
-  studiedCards, 
-  currentQuestionIndex, 
+const SessionDebugInfo = ({
+  sessionId,
+  currentPhase,
+  currentCardIndex,
+  studiedCards,
+  currentQuestionIndex,
   answers,
-  resumeData 
+  resumeData
 }) => {
   // Only show in development
   if (process.env.NODE_ENV !== 'development') {
@@ -21,7 +22,7 @@ const SessionDebugInfo = ({
 
   return (
     <div className="session-debug-info">
-      <h4>🔧 Debug Info</h4>
+      <h4><img src={boltIcon} alt="Debug" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Debug Info</h4>
       <div className="debug-section">
         <strong>Session ID:</strong> {sessionId || 'Not set'}
       </div>

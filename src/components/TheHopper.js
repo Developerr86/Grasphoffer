@@ -5,6 +5,12 @@ import { prepareLearningContext, callTheHopper } from '../lib/theHopperService';
 import MagicLoader from './MagicLoader';
 import './TheHopper.css';
 
+// Icons
+import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import stopwatchIcon from '../assets/icons/Stop_watch-logo.PNG';
+import logoutIcon from '../assets/icons/Log-Out.PNG';
+
 const TheHopper = ({ onClose }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -37,10 +43,10 @@ const TheHopper = ({ onClose }) => {
   const prepareContext = async () => {
     try {
       setIsLoading(true);
-      
+
       // Use the service to prepare context
       const result = await prepareLearningContext(user.id);
-      
+
       if (result.success) {
         setContextInfo(result.contextContent);
         setContextReady(true);
@@ -55,13 +61,13 @@ const TheHopper = ({ onClose }) => {
           const struggles = result.contextContent.match(/\*\*(.*?)\*\*/g)?.map(s => s.replace(/\*\*/g, '')) || [];
           setWeakConcepts(struggles);
         }
-        
+
         // Add welcome message with context summary
         setMessages([
           {
             id: 1,
             type: 'hopper',
-            content: `🦗 **TheHopper is ready to help!**\n\nI have access to:\n• ${result.metadata.documentCount} uploaded documents\n• ${result.metadata.flashcardCount} generated flashcards\n• ${result.metadata.struggleCount} areas you're working on\n• ${result.metadata.sessionCount} learning sessions\n\nAsk me anything about your learning materials, or get help with concepts you find challenging!`,
+            content: `![Hopper](${hopperIcon}) **TheHopper is ready to help!**\n\nI have access to:\n• ${result.metadata.documentCount} uploaded documents\n• ${result.metadata.flashcardCount} generated flashcards\n• ${result.metadata.struggleCount} areas you're working on\n• ${result.metadata.sessionCount} learning sessions\n\nAsk me anything about your learning materials, or get help with concepts you find challenging!`,
             timestamp: new Date()
           }
         ]);
@@ -75,7 +81,7 @@ const TheHopper = ({ onClose }) => {
         {
           id: 1,
           type: 'hopper',
-          content: '🦗 **TheHopper is here to help!**\n\nI\'m having trouble accessing your learning materials right now, but I can still help with general questions. What would you like to know?',
+          content: `![Hopper](${hopperIcon}) **TheHopper is here to help!**\n\nI'm having trouble accessing your learning materials right now, but I can still help with general questions. What would you like to know?`,
           timestamp: new Date()
         }
       ]);
@@ -88,13 +94,13 @@ const TheHopper = ({ onClose }) => {
   // Handle progress updates from TheHopper service
   const handleProgressUpdate = (progressData) => {
     setProcessingStatus(progressData);
-    
+
     // Update the thinking message with progress
     setMessages(prev => prev.map(msg => {
       if (msg.type === 'hopper' && msg.isThinking) {
         return {
           ...msg,
-          content: `🧠 **TheHopper is processing your question...**\n\n**Progress:** ${progressData.progress}%\n**Status:** ${progressData.message}\n\nThis may take a few minutes as I analyze your learning materials and generate a personalized response.`,
+          content: `![Thinking](${hopperIcon}) **TheHopper is processing your question...**\n\n**Progress:** ${progressData.progress}%\n**Status:** ${progressData.message}\n\nThis may take a few minutes as I analyze your learning materials and generate a personalized response.`,
           progress: progressData.progress
         };
       }
@@ -123,7 +129,7 @@ const TheHopper = ({ onClose }) => {
       const thinkingMessage = {
         id: Date.now() + 1,
         type: 'hopper',
-        content: `🧠 **TheHopper is processing your question...**\n\n**Progress:** 0%\n**Status:** Initializing...\n\nThis may take a few minutes as I analyze your learning materials and generate a personalized response.`,
+        content: `![Thinking](${hopperIcon}) **TheHopper is processing your question...**\n\n**Progress:** 0%\n**Status:** Initializing...\n\nThis may take a few minutes as I analyze your learning materials and generate a personalized response.`,
         timestamp: new Date(),
         isThinking: true,
         progress: 0
@@ -139,7 +145,7 @@ const TheHopper = ({ onClose }) => {
         statsData,
         handleProgressUpdate
       );
-      
+
       if (response.success) {
         // Log response source to browser console
         console.log('=== THEHOPPER RESPONSE RECEIVED ===');
@@ -170,7 +176,7 @@ const TheHopper = ({ onClose }) => {
           const timeMessage = {
             id: Date.now() + 2,
             type: 'system',
-            content: `⏱️ **Processing completed in ${Math.round(response.processingTime / 1000)} seconds**`,
+            content: `![Time](${stopwatchIcon}) **Processing completed in ${Math.round(response.processingTime / 1000)} seconds**`,
             timestamp: new Date()
           };
           setMessages(prev => [...prev, timeMessage]);
@@ -191,7 +197,7 @@ const TheHopper = ({ onClose }) => {
           return {
             id: msg.id,
             type: 'hopper',
-            content: `❌ **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3002\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
+            content: `![Error](${logoutIcon}) **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3002\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
             timestamp: new Date()
           };
         }
@@ -218,8 +224,8 @@ const TheHopper = ({ onClose }) => {
     return (
       <div className="progress-container">
         <div className="progress-bar">
-          <div 
-            className="progress-fill" 
+          <div
+            className="progress-fill"
             style={{ width: `${processingStatus.progress}%` }}
           ></div>
         </div>
@@ -234,8 +240,8 @@ const TheHopper = ({ onClose }) => {
     <div className="thehopper-overlay">
       <div className="thehopper-container">
         <div className="thehopper-header">
-          <h2>🦗 TheHopper</h2>
-          <button className="close-button" onClick={onClose}>×</button>
+          <h2><img src={hopperIcon} alt="TheHopper" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} /> TheHopper</h2>
+          <button className="close-button" onClick={onClose}><img src={logoutIcon} alt="Close" style={{ width: '24px', height: '24px' }} /></button>
         </div>
 
         <div className="thehopper-status">
@@ -246,7 +252,7 @@ const TheHopper = ({ onClose }) => {
             </div>
           ) : (
             <div className="status-ready">
-              ✅ Ready to help with your learning materials
+              <img src={checkIcon} alt="Ready" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Ready to help with your learning materials
             </div>
           )}
         </div>
@@ -267,13 +273,13 @@ const TheHopper = ({ onClose }) => {
                 {message.timestamp.toLocaleTimeString()}
                 {message.processingTime && (
                   <span className="processing-time">
-                    ⏱️ {Math.round(message.processingTime / 1000)}s
+                    <img src={stopwatchIcon} alt="Time" style={{ width: '20px', height: '20px', verticalAlign: 'middle' }} /> {Math.round(message.processingTime / 1000)}s
                   </span>
                 )}
               </div>
             </div>
           ))}
-          
+
           {isLoading && !processingStatus && (
             <div className="message hopper">
               <div className="message-content">
@@ -286,7 +292,7 @@ const TheHopper = ({ onClose }) => {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 

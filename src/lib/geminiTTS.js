@@ -8,7 +8,7 @@ import mime from 'mime';
 
 // Initialize Gemini AI
 const genAI = new GoogleGenAI({
-  apiKey: process.env.REACT_APP_GEMINI_API_KEYY
+  apiKey: process.env.REACT_APP_GEMINI_API_KEY
 });
 
 /**

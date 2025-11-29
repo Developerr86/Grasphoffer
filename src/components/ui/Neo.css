@@ -1,0 +1,816 @@
+/* Neo UI Component Styles */
+
+/* NeoButton */
+.neo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 700;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none !important;
+}
+
+.neo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: var(--shadow-hard) !important;
+}
+
+.neo-btn-primary {
+    background-color: var(--accent-green);
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-primary:hover {
+    background-color: #00b34a;
+}
+
+.neo-btn-secondary {
+    background-color: var(--accent-yellow);
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-secondary:hover {
+    background-color: #e6c200;
+}
+
+.neo-btn-outline {
+    background-color: #FFFFFF;
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-outline:hover {
+    background-color: #f9fafb;
+}
+
+.neo-btn-ghost {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.neo-btn-ghost:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.neo-btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.neo-btn-md {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.neo-btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+.neo-btn-full {
+    width: 100%;
+}
+
+/* NeoCard */
+.neo-card {
+    background-color: #FFFFFF;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-hard);
+    overflow: hidden;
+    position: relative;
+}
+
+.neo-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hard-lg);
+    transition: all 0.2s ease;
+}
+
+.neo-card-p-none {
+    padding: 0;
+}
+
+.neo-card-p-sm {
+    padding: 1rem;
+}
+
+.neo-card-p-md {
+    padding: 1.5rem;
+}
+
+.neo-card-p-lg {
+    padding: 2rem;
+}
+
+/* NeoInput */
+.neo-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.neo-input-label {
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+.neo-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #FFFFFF;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-hard-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.neo-input:focus {
+    outline: none;
+    box-shadow: var(--shadow-hard);
+    transform: translateY(-1px);
+}
+
+.neo-input-error {
+    border-color: #ef4444;
+}
+
+.neo-input-error-text {
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.25rem;
+}
+
+/* NeoBadge */
+.neo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+}
+
+.neo-badge-default {
+    background-color: #FFFFFF;
+    color: var(--text-main);
+}
+
+.neo-badge-primary {
+    background-color: var(--accent-green);
+    color: var(--text-main);
+}
+
+/* Neo UI Component Styles */
+
+/* NeoButton */
+.neo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 700;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none !important;
+}
+
+.neo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: var(--shadow-hard) !important;
+}
+
+.neo-btn-primary {
+    background-color: var(--accent-green);
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-primary:hover {
+    background-color: #00b34a;
+}
+
+.neo-btn-secondary {
+    background-color: var(--accent-yellow);
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-secondary:hover {
+    background-color: #e6c200;
+}
+
+.neo-btn-outline {
+    background-color: #FFFFFF;
+    color: var(--text-main);
+    box-shadow: var(--shadow-hard);
+}
+
+.neo-btn-outline:hover {
+    background-color: #f9fafb;
+}
+
+.neo-btn-ghost {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.neo-btn-ghost:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.neo-btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.neo-btn-md {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.neo-btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+.neo-btn-full {
+    width: 100%;
+}
+
+/* NeoCard */
+.neo-card {
+    background-color: #FFFFFF;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-hard);
+    overflow: hidden;
+    position: relative;
+}
+
+.neo-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hard-lg);
+    transition: all 0.2s ease;
+}
+
+.neo-card-p-none {
+    padding: 0;
+}
+
+.neo-card-p-sm {
+    padding: 1rem;
+}
+
+.neo-card-p-md {
+    padding: 1.5rem;
+}
+
+.neo-card-p-lg {
+    padding: 2rem;
+}
+
+/* NeoInput */
+.neo-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.neo-input-label {
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+}
+
+.neo-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #FFFFFF;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-hard-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.neo-input:focus {
+    outline: none;
+    box-shadow: var(--shadow-hard);
+    transform: translateY(-1px);
+}
+
+.neo-input-error {
+    border-color: #ef4444;
+}
+
+.neo-input-error-text {
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.25rem;
+}
+
+/* NeoBadge */
+.neo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+}
+
+.neo-badge-default {
+    background-color: #FFFFFF;
+    color: var(--text-main);
+}
+
+.neo-badge-primary {
+    background-color: var(--accent-green);
+    color: var(--text-main);
+}
+
+.neo-badge-secondary {
+    background-color: var(--accent-yellow);
+    color: var(--text-main);
+}
+
+.neo-badge-dark {
+    .neo-badge-primary {
+        background-color: var(--accent-green);
+        color: var(--text-main);
+    }
+
+    /* Neo UI Component Styles */
+
+    /* NeoButton */
+    .neo-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 700;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .neo-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: none !important;
+    }
+
+    .neo-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: var(--shadow-hard) !important;
+    }
+
+    .neo-btn-primary {
+        background-color: var(--accent-green);
+        color: var(--text-main);
+        box-shadow: var(--shadow-hard);
+    }
+
+    .neo-btn-primary:hover {
+        background-color: #00b34a;
+    }
+
+    .neo-btn-secondary {
+        background-color: var(--accent-yellow);
+        color: var(--text-main);
+        box-shadow: var(--shadow-hard);
+    }
+
+    .neo-btn-secondary:hover {
+        background-color: #e6c200;
+    }
+
+    .neo-btn-outline {
+        background-color: #FFFFFF;
+        color: var(--text-main);
+        box-shadow: var(--shadow-hard);
+    }
+
+    .neo-btn-outline:hover {
+        background-color: #f9fafb;
+    }
+
+    .neo-btn-ghost {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+    .neo-btn-ghost:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .neo-btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .neo-btn-md {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .neo-btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+    }
+
+    .neo-btn-full {
+        width: 100%;
+    }
+
+    /* NeoCard */
+    .neo-card {
+        background-color: #FFFFFF;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-hard);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .neo-card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hard-lg);
+        transition: all 0.2s ease;
+    }
+
+    .neo-card-p-none {
+        padding: 0;
+    }
+
+    .neo-card-p-sm {
+        padding: 1rem;
+    }
+
+    .neo-card-p-md {
+        padding: 1.5rem;
+    }
+
+    .neo-card-p-lg {
+        padding: 2rem;
+    }
+
+    /* NeoInput */
+    .neo-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .neo-input-label {
+        font-weight: 700;
+        font-size: 0.875rem;
+        margin-left: 0.25rem;
+    }
+
+    .neo-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #FFFFFF;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-hard-sm);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .neo-input:focus {
+        outline: none;
+        box-shadow: var(--shadow-hard);
+        transform: translateY(-1px);
+    }
+
+    .neo-input-error {
+        border-color: #ef4444;
+    }
+
+    .neo-input-error-text {
+        color: #ef4444;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-left: 0.25rem;
+    }
+
+    /* NeoBadge */
+    .neo-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-pill);
+        white-space: nowrap;
+    }
+
+    .neo-badge-default {
+        background-color: #FFFFFF;
+        color: var(--text-main);
+    }
+
+    .neo-badge-primary {
+        background-color: var(--accent-green);
+        color: var(--text-main);
+    }
+
+    .neo-badge-secondary {
+        background-color: var(--accent-yellow);
+        color: var(--text-main);
+    }
+
+    .neo-badge-dark {
+        background-color: var(--text-main);
+        color: #FFFFFF;
+        border-color: #FFFFFF;
+    }
+
+    /* Utility Classes */
+    .bg-yellow {
+        background-color: var(--accent-yellow);
+    }
+
+    .bg-purple {
+        background-color: #E0B0FF;
+    }
+
+    .bg-green {
+        background-color: var(--accent-green);
+    }
+
+    /* Icon Utilities */
+    .neo-icon {
+        width: 1.5em;
+        height: 1.5em;
+        object-fit: contain;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .neo-icon-sm {
+        width: 1.25em;
+        height: 1.25em;
+    }
+
+    .neo-icon-lg {
+        width: 2.5em;
+        height: 2.5em;
+    }
+
+    .neo-icon-xl {
+        width: 4em;
+        height: 4em;
+    }
+
+
+    .neo-btn-secondary {
+        background-color: var(--accent-yellow);
+        color: var(--text-main);
+        box-shadow: var(--shadow-hard);
+    }
+
+    .neo-btn-secondary:hover {
+        background-color: #e6c200;
+    }
+
+    .neo-btn-outline {
+        background-color: #FFFFFF;
+        color: var(--text-main);
+        box-shadow: var(--shadow-hard);
+    }
+
+    .neo-btn-outline:hover {
+        background-color: #f9fafb;
+    }
+
+    .neo-btn-ghost {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+    .neo-btn-ghost:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .neo-btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .neo-btn-md {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .neo-btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+    }
+
+    .neo-btn-full {
+        width: 100%;
+    }
+
+    /* NeoCard */
+    .neo-card {
+        background-color: #FFFFFF;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-hard);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .neo-card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hard-lg);
+        transition: all 0.2s ease;
+    }
+
+    .neo-card-p-none {
+        padding: 0;
+    }
+
+    .neo-card-p-sm {
+        padding: 1rem;
+    }
+
+    .neo-card-p-md {
+        padding: 1.5rem;
+    }
+
+    .neo-card-p-lg {
+        padding: 2rem;
+    }
+
+    /* NeoInput */
+    .neo-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .neo-input-label {
+        font-weight: 700;
+        font-size: 0.875rem;
+        margin-left: 0.25rem;
+    }
+
+    .neo-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #FFFFFF;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-hard-sm);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .neo-input:focus {
+        outline: none;
+        box-shadow: var(--shadow-hard);
+        transform: translateY(-1px);
+    }
+
+    .neo-input-error {
+        border-color: #ef4444;
+    }
+
+    .neo-input-error-text {
+        color: #ef4444;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-left: 0.25rem;
+    }
+
+    /* NeoBadge */
+    .neo-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--radius-pill);
+        white-space: nowrap;
+    }
+
+    .neo-badge-default {
+        background-color: #FFFFFF;
+        color: var(--text-main);
+    }
+
+    .neo-badge-primary {
+        background-color: var(--accent-green);
+        color: var(--text-main);
+    }
+
+    .neo-badge-secondary {
+        background-color: var(--accent-yellow);
+        color: var(--text-main);
+    }
+
+    .neo-badge-dark {
+        background-color: var(--text-main);
+        color: #FFFFFF;
+        border-color: #FFFFFF;
+    }
+
+    /* Utility Classes */
+    .bg-yellow {
+        background-color: var(--accent-yellow);
+    }
+
+    .bg-purple {
+        background-color: #E0B0FF;
+    }
+
+    .bg-green {
+        background-color: var(--accent-green);
+    }
+
+    /* Icon Utilities */
+    .neo-icon {
+        width: 1.5em;
+        height: 1.5em;
+        object-fit: contain;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .neo-icon-sm {
+        width: 1.25em;
+        height: 1.25em;
+    }
+
+    .neo-icon-lg {
+        width: 2.5em;
+        height: 2.5em;
+    }
+
+    .neo-icon-xl {
+        width: 4em;
+        height: 4em;
+    }
+
+    .neo-icon-hero-1 {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    .neo-icon-hero-2 {
+        width: 4rem;
+        height: 4rem;
+    }
+}

@@ -11,6 +11,10 @@ import SessionDebugInfo from './SessionDebugInfo';
 import EvaluationReport from './EvaluationReport';
 import MagicLoader from './MagicLoader';
 import './FastLearningSession.css';
+import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
+import checkIcon from '../assets/icons/green-tick.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
+import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
 
 const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBack, onOpenTheHopper }) => {
   const [topic] = useState(initialTopic);
@@ -338,9 +342,9 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
       <div className="fast-learning-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
 
@@ -390,7 +394,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
             className="hopper-explain-button"
             title="Ask TheHopper to explain concepts"
           >
-            <span className="hopper-icon">🦗</span>
+            <img src={hopperIcon} alt="Hopper" className="hopper-icon" style={{ width: '32px', height: '32px' }} />
             Hopper Explain
           </button>
         )}
@@ -404,19 +408,19 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
       <div className="fast-learning-container">
         <div className="nav-menu" onClick={onBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </div>
 
         <h1 className="title">Fast Learning Complete!</h1>
-        
+
         <div className="completion-section">
           <div className="completion-icon">
-            {evaluationResults?.passed ? '🎉' : '📚'}
+            {evaluationResults?.passed ? <img src={targetIcon} alt="Congrats" style={{ width: '64px', height: '64px' }} /> : <img src={treeIcon} alt="Study" style={{ width: '64px', height: '64px' }} />}
           </div>
-          
+
           <div className="results-summary">
             <h2>Your Results</h2>
             <div className="score-display">
@@ -425,9 +429,9 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                 {evaluationResults?.correct} out of {evaluationResults?.total} correct
               </span>
             </div>
-            
+
             <div className={`result-status ${evaluationResults?.passed ? 'passed' : 'needs-improvement'}`}>
-              {evaluationResults?.passed ? 
+              {evaluationResults?.passed ?
                 'Great job! You have a good understanding of the topic.' :
                 'Keep studying! Review the material and try again.'
               }
@@ -458,9 +462,9 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
 
       <div className="nav-menu" onClick={onBack}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </div>
 
@@ -480,7 +484,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
 
           <div className="flashcard-section">
             <div className="flashcard-wrapper">
-              <div 
+              <div
                 className={`flashcard ${isFlipped ? 'flipped' : ''}`}
                 onClick={handleCardClick}
               >
@@ -491,7 +495,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                   <div className="card-content">
                     <h3>{flashcards[currentCardIndex]?.question}</h3>
                     <div className="tap-instruction">
-                      {!isFlipped && <span>👆 Tap to reveal answer</span>}
+                      {!isFlipped && <span><img src={targetIcon} alt="Tap" style={{ width: '24px', height: '24px', verticalAlign: 'middle' }} /> Tap to reveal answer</span>}
                     </div>
                   </div>
                 </div>
@@ -514,7 +518,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                 disabled={currentCardIndex === 0}
                 className="nav-button"
               >
-                ← Previous
+                Previous
               </button>
 
               <div className="card-indicators">
@@ -527,7 +531,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                       setIsFlipped(false);
                     }}
                   >
-                    {studiedCards.has(index) && <span className="tick-mark">✓</span>}
+                    {studiedCards.has(index) && <span className="tick-mark"><img src={checkIcon} alt="Done" style={{ width: '16px', height: '16px' }} /></span>}
                   </div>
                 ))}
               </div>
@@ -537,7 +541,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                 disabled={currentCardIndex === flashcards.length - 1}
                 className="nav-button"
               >
-                Next →
+                Next
               </button>
             </div>
 
@@ -560,7 +564,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
               className="hopper-explain-button"
               title="Ask TheHopper to explain concepts"
             >
-              <span className="hopper-icon">🦗</span>
+              <img src={hopperIcon} alt="Hopper" className="hopper-icon" style={{ width: '32px', height: '32px' }} />
               Hopper Explain
             </button>
           )}
