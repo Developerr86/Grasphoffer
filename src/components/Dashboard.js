@@ -269,7 +269,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
             <NeoCard className="bg-yellow">
               <div className="stat-card-header">
                 <span className="stat-label">Study Time</span>
-                <span className="stat-icon"><img src={stopwatchIcon} alt="Time" style={{ width: '32px', height: '32px' }} /></span>
+                <span className="stat-icon"><img src={stopwatchIcon} alt="Time" style={{ width: '64px', height: '64px' }} /></span>
               </div>
               <div className="stat-value">124 <span className="stat-unit">Hours</span></div>
               <div className="chart-bars">
@@ -282,7 +282,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
             <NeoCard className="bg-purple">
               <div className="stat-card-header">
                 <span className="stat-label">Sessions Completed</span>
-                <span className="stat-icon"><img src={checkIcon} alt="Completed" style={{ width: '32px', height: '32px' }} /></span>
+                <span className="stat-icon"><img src={checkIcon} alt="Completed" style={{ width: '64px', height: '64px' }} /></span>
               </div>
               <div className="stat-value">
                 {recentSessions.filter(s => {
@@ -295,7 +295,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
             <NeoCard>
               <div className="stat-card-header">
                 <span className="stat-label">Avg. Score</span>
-                <span className="stat-icon"><img src={targetIcon} alt="Score" style={{ width: '32px', height: '32px' }} /></span>
+                <span className="stat-icon"><img src={targetIcon} alt="Score" style={{ width: '64px', height: '64px' }} /></span>
               </div>
               <div className="stat-value">
                 {(() => {
