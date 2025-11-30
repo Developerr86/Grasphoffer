@@ -62,7 +62,6 @@
 
 /* Topic Form */
 .topic-form {
-  display: flex;
   align-items: center;
   position: relative;
   max-width: 700px;

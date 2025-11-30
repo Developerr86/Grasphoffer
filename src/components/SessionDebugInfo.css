@@ -16,10 +16,54 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+.session-debug-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 9999;
+  border: 1px solid #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.session-debug-toggle:hover {
+  transform: scale(1.1);
+}
+
+.debug-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
 .session-debug-info h4 {
-  margin: 0 0 10px 0;
+  margin: 0;
   color: #ffff00;
   font-size: 14px;
+}
+
+.close-debug {
+  background: none;
+  border: none;
+  color: #ff5555;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.close-debug:hover {
+  color: #ff0000;
 }
 
 .debug-section {

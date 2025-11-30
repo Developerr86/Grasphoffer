@@ -485,10 +485,10 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
           <div className="flashcard-section">
             <div className="flashcard-wrapper">
               <div
-                className={`flashcard ${isFlipped ? 'flipped' : ''}`}
+                className={`fast-flashcard ${isFlipped ? 'flipped' : ''}`}
                 onClick={handleCardClick}
               >
-                <div className="flashcard-front">
+                <div className="fast-flashcard-front">
                   <div className="card-number">
                     {currentCardIndex + 1} / {flashcards.length}
                   </div>
@@ -499,7 +499,7 @@ const FastLearningSession = ({ topic: initialTopic = '', resumeData = null, onBa
                     </div>
                   </div>
                 </div>
-                <div className="flashcard-back">
+                <div className="fast-flashcard-back">
                   <div className="card-number">
                     {currentCardIndex + 1} / {flashcards.length}
                   </div>
