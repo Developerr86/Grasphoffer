@@ -157,3 +157,18 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #333;
 }
+
+/* View transitions for dark mode toggle spill-fill effect */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
