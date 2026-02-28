@@ -3,8 +3,6 @@
  * LLM functionality removed, returns static data
  */
 
-import { supabase } from './supabase';
-
 /**
  * Get all topics the user has engaged with
  * @param {string} userId - User ID

@@ -78,9 +78,6 @@ export const generateMCQQuestions = async (topic) => {
 export const generateEvaluationReport = async (results, topics) => {
   try {
     console.log('[NVIDIA LLM] generateEvaluationReport called');
-    const totalTopics = topics.length;
-    const passedTopics = topics.filter(topic => results[topic]?.passed).length;
-    const failedTopics = totalTopics - passedTopics;
 
     const topicsList = topics.join(', ');
     const resultsJson = JSON.stringify(results);

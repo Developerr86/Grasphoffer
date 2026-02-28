@@ -222,7 +222,7 @@ const FileUpload = ({ onFilesSubmit, disabled = false }) => {
               {uploadedFiles.map((file, index) => (
                 <div key={`file-${index}`} className="attachment-item">
                   <span className="attachment-icon">
-                    {file.fileName ? <img src={treeIcon} alt="File" style={{ width: '16px', height: '16px' }} /> : (file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="Image" style={{ width: '16px', height: '16px' }} />)}
+                    {file.fileName ? <img src={treeIcon} alt="File" style={{ width: '16px', height: '16px' }} /> : (file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="File graphic" style={{ width: '16px', height: '16px' }} />)}
                   </span>
                   <span className="attachment-name">
                     {file.fileName || file.name}

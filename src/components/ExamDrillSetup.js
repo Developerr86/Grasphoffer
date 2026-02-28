@@ -20,6 +20,7 @@ const ExamDrillSetup = ({ onStartDrill }) => {
     if (user) {
       loadExistingPapers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadExistingPapers = async () => {

@@ -125,8 +125,10 @@ export const generateNvidiaStructured = async (
   }
 };
 
-export default {
+const nvidiallm = {
   generateNvidiaResponse,
   generateNvidiaCompletions,
   generateNvidiaStructured
 };
+
+export default nvidiallm;

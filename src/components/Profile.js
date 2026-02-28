@@ -5,8 +5,6 @@ import { getRecentSessions } from '../lib/sessionService';
 import { getMostStruggledTopics } from '../lib/topicStruggleService';
 import { getComprehensiveAnalytics } from '../lib/analyticsService';
 import { calculateAchievements, calculateUserLevel } from '../lib/achievementService';
-import TrendChart from './charts/TrendChart';
-import ProgressRing from './charts/ProgressRing';
 import NeoButton from './ui/NeoButton';
 import NeoCard from './ui/NeoCard';
 import NeoBadge from './ui/NeoBadge';
@@ -21,7 +19,6 @@ import targetIcon from '../assets/icons/Target-board.PNG';
 import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
 import boltIcon from '../assets/icons/Lightning-bolt.PNG';
 import stopwatchIcon from '../assets/icons/Stop_watch-logo.PNG';
-import checkIcon from '../assets/icons/green-tick.PNG';
 
 const ICON_MAP = {
   'target': targetIcon,
@@ -58,6 +55,7 @@ const Profile = ({ onBack }) => {
   const [saveMessage, setSaveMessage] = useState('');
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [struggledTopics, setStruggledTopics] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [achievements, setAchievements] = useState(null);

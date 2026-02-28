@@ -9,7 +9,7 @@ const ForceDirectedGraph = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
+
     // Set canvas size
     const updateCanvasSize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -26,7 +26,7 @@ const ForceDirectedGraph = () => {
     // Initialize nodes
     const centerX = canvas.offsetWidth / 2;
     const centerY = canvas.offsetHeight / 2;
-    
+
     // Single orange color with different sizes
     const nodeTypes = [
       { color: '#ff8c42', size: 6, type: 'core' },
@@ -85,14 +85,11 @@ const ForceDirectedGraph = () => {
       });
     });
 
-    let time = 0;
-
     const animate = () => {
-      time += 0.016; // ~60fps
-      
+
       // Clear canvas
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-      
+
       const nodes = nodesRef.current;
       const connections = connectionsRef.current;
 
@@ -142,7 +139,7 @@ const ForceDirectedGraph = () => {
             const dx = otherNode.x - node.x;
             const dy = otherNode.y - node.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            
+
             if (distance > 0) {
               const force = connection.strength * 0.001;
               node.vx += (dx / distance) * force;
@@ -235,7 +232,7 @@ const ForceDirectedGraph = () => {
       nodes.forEach(node => {
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
-        
+
         // Gradient fill
         const gradient = ctx.createRadialGradient(
           node.x, node.y, 0,
@@ -243,10 +240,10 @@ const ForceDirectedGraph = () => {
         );
         gradient.addColorStop(0, node.color);
         gradient.addColorStop(1, node.color + '40');
-        
+
         ctx.fillStyle = gradient;
         ctx.fill();
-        
+
         // Subtle glow
         ctx.shadowColor = node.color;
         ctx.shadowBlur = 8;

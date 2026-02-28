@@ -25,6 +25,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
     if (files && files.length > 0 && !processing) {
       handleProcessFiles();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
   // Debug progress changes
@@ -195,7 +196,7 @@ const FileProcessor = ({ files, onComplete, onError }) => {
             {files.map((file, index) => (
               <div key={index} className="file-item">
                 <span className="file-icon">
-                  {file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="Image" style={{ width: '16px', height: '16px' }} />}
+                  {file.type === 'application/pdf' ? <img src={treeIcon} alt="PDF" style={{ width: '16px', height: '16px' }} /> : <img src={treeIcon} alt="File graphic" style={{ width: '16px', height: '16px' }} />}
                 </span>
                 <div className="file-info">
                   <span className="file-name">{file.name}</span>

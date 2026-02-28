@@ -26,6 +26,7 @@ const PodcastPage = ({ onBack }) => {
   // Load user topics on component mount
   useEffect(() => {
     loadUserTopics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadUserTopics = async () => {

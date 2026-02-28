@@ -1,5 +1,3 @@
-import { supabase } from './supabase';
-
 /**
  * TheHopper Service - Handles RAG chatbot functionality
  * This service prepares context and calls the Groq API for intelligent responses

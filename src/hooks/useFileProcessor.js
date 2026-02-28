@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { processFile, processMultipleFiles } from '../lib/fileProcessor';
+import { processFile } from '../lib/fileProcessor';
 import { useAuth } from '../context/AuthContext';
 
 /**
@@ -30,18 +30,18 @@ export function useFileProcessor() {
 
     try {
       console.log(`Starting processing for: ${file.name}`);
-      
+
       // Validate file
       if (!isValidFile(file)) {
         throw new Error(`Invalid file type or size: ${file.name}`);
       }
 
       setProgress(10);
-      
+
       const result = await processFile(file, user.id);
-      
+
       setProgress(100);
-      
+
       if (result.success) {
         setResults(prev => [...prev, result]);
         console.log('File processing completed successfully:', result);
@@ -49,9 +49,9 @@ export function useFileProcessor() {
         setErrors(prev => [...prev, result.error]);
         console.error('File processing failed:', result.error);
       }
-      
+
       return result;
-      
+
     } catch (error) {
       console.error('File processing error:', error);
       setErrors(prev => [...prev, error.message]);
@@ -94,7 +94,7 @@ export function useFileProcessor() {
 
     // Add errors for invalid files
     if (invalidFiles.length > 0) {
-      const invalidErrors = invalidFiles.map(file => 
+      const invalidErrors = invalidFiles.map(file =>
         `Invalid file: ${file.name} (${file.type}, ${(file.size / 1024 / 1024).toFixed(2)}MB)`
       );
       setErrors(prev => [...prev, ...invalidErrors]);
@@ -135,7 +135,7 @@ export function useFileProcessor() {
 
       setProgress(100);
       console.log(`Progress: 100% - Completed processing ${validFiles.length} files`);
-      
+
       return allResults;
 
     } catch (error) {
@@ -178,13 +178,13 @@ export function useFileProcessor() {
     currentFile,
     results,
     errors,
-    
+
     // Actions
     processSingleFile,
     processFiles,
     clearResults,
     reset,
-    
+
     // Computed
     hasResults: results.length > 0,
     hasErrors: errors.length > 0,
@@ -203,7 +203,7 @@ function isValidFile(file) {
   const ALLOWED_TYPES = [
     'application/pdf',
     'image/jpeg',
-    'image/jpg', 
+    'image/jpg',
     'image/png',
     'image/gif',
     'image/bmp',
@@ -251,10 +251,10 @@ export function getFileTypeDisplay(mimeType) {
  */
 export function formatFileSize(bytes) {
   if (bytes === 0) return '0 Bytes';
-  
+
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './TopicInput.css';
-import targetIcon from '../assets/icons/Target-board.PNG';
 
 const TopicInput = ({ onTopicSubmit, disabled = false }) => {
   const [topic, setTopic] = useState('');

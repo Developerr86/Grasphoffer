@@ -3,8 +3,7 @@ import { supabase } from './supabase';
 import {
   createOptimizedWorker,
   detectLanguageFromFileName,
-  getOCRPreset,
-  DEFAULT_LANGUAGES
+  getOCRPreset
 } from './tesseractConfig';
 
 // Configure PDF.js worker to use the correct version from public folder
@@ -50,10 +49,10 @@ export async function processFile(file, userId) {
 
     // Convert to markdown
     const markdownContent = convertToMarkdown(extractedText, file.name, processingMethod);
-    
+
     // Upload to Supabase and get storage info
     const storageResult = await uploadToSupabase(markdownContent, file.name, userId);
-    
+
     // Store document metadata in database
     const documentRecord = await storeDocumentMetadata({
       userId,
@@ -79,7 +78,7 @@ export async function processFile(file, userId) {
 
   } catch (error) {
     console.error('File processing error:', error);
-    
+
     // Check if it's a Supabase storage error
     if (error.message && error.message.includes('storage')) {
       return {
@@ -89,7 +88,7 @@ export async function processFile(file, userId) {
         fileName: file.name
       };
     }
-    
+
     return {
       success: false,
       error: error.message,
@@ -106,15 +105,15 @@ export async function processFile(file, userId) {
 async function processPDF(file) {
   try {
     console.log('Attempting PDF text extraction...');
-    
+
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    
+
     const numPages = Math.min(pdf.numPages, MAX_PDF_PAGES);
     console.log(`PDF has ${pdf.numPages} pages, processing ${numPages} pages`);
-    
+
     let extractedText = '';
-    
+
     // Try text extraction first
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
@@ -122,10 +121,10 @@ async function processPDF(file) {
       const pageText = textContent.items.map(item => item.str).join(' ');
       extractedText += `\n\n--- Page ${pageNum} ---\n${pageText}`;
     }
-    
+
     // Check if we got meaningful text (more than just whitespace and basic chars)
-    const meaningfulText = extractedText.replace(/[\s\n\r\t\-]/g, '');
-    
+    const meaningfulText = extractedText.replace(/[\s\n\r\t-]/g, '');
+
     if (meaningfulText.length > 50) {
       console.log('PDF text extraction successful');
       return { text: extractedText.trim(), method: 'PDF.js Text Extraction' };
@@ -133,7 +132,7 @@ async function processPDF(file) {
       console.log('PDF text extraction yielded minimal text, falling back to OCR...');
       return await processPDFWithOCR(file, pdf, numPages);
     }
-    
+
   } catch (error) {
     console.error('PDF processing error:', error);
     throw new Error(`Failed to process PDF: ${error.message}`);
@@ -161,38 +160,38 @@ async function processPDFWithOCR(file, pdf, numPages) {
       }
     }
   });
-  
+
   let ocrText = '';
-  
+
   try {
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       console.log(`Processing PDF page ${pageNum}/${numPages} with OCR...`);
-      
+
       const page = await pdf.getPage(pageNum);
       const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better OCR
-      
+
       // Create canvas to render PDF page
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-      
+
       // Render PDF page to canvas
       await page.render({
         canvasContext: context,
         viewport: viewport
       }).promise;
-      
+
       // Convert canvas to image data for OCR
       const imageData = canvas.toDataURL('image/png');
-      
+
       // Perform OCR on the page
       const { data: { text } } = await worker.recognize(imageData);
       ocrText += `\n\n--- Page ${pageNum} (OCR) ---\n${text}`;
     }
-    
+
     return { text: ocrText.trim(), method: 'Tesseract OCR (PDF)' };
-    
+
   } finally {
     await worker.terminate();
   }
@@ -241,7 +240,7 @@ async function processImage(file) {
  */
 function convertToMarkdown(text, fileName, method) {
   const timestamp = new Date().toISOString();
-  
+
   const markdownContent = `# Extracted Content: ${fileName}
 
 **File:** ${fileName}  
@@ -275,12 +274,12 @@ async function uploadToSupabase(markdownContent, originalFileName, userId) {
     const sanitizedFileName = originalFileName.replace(/[^a-zA-Z0-9.-]/g, '_');
     const markdownFileName = `${timestamp}_${sanitizedFileName}.md`;
     const filePath = `${userId}/${markdownFileName}`;
-    
+
     console.log(`Uploading to Supabase: ${filePath}`);
-    
+
     // Convert markdown string to Blob for upload
     const blob = new Blob([markdownContent], { type: 'text/markdown' });
-    
+
     // Upload to documents bucket
     const { data, error } = await supabase.storage
       .from('documents')
@@ -288,26 +287,26 @@ async function uploadToSupabase(markdownContent, originalFileName, userId) {
         contentType: 'text/markdown',
         upsert: true
       });
-    
+
     if (error) {
       console.error('Upload error:', error);
       throw error; // Let the caller handle the error
     }
-    
+
     // Get public URL
     const { data: urlData } = supabase.storage
       .from('documents')
       .getPublicUrl(filePath);
-    
+
     console.log('Successfully uploaded to Supabase');
-    
+
     return {
       path: filePath,
       url: urlData.publicUrl,
       fileName: markdownFileName,
       uploadData: data
     };
-    
+
   } catch (error) {
     console.error('Supabase upload error:', error);
     throw error; // Re-throw to let caller handle
@@ -322,15 +321,15 @@ async function uploadToSupabase(markdownContent, originalFileName, userId) {
 async function storeDocumentMetadata(metadata) {
   try {
     // First, check if the table exists by trying to query it
-    const { data: tableCheck, error: checkError } = await supabase
+    const { error: checkError } = await supabase
       .from('user_documents')
       .select('id')
       .limit(1);
-    
+
     // If table doesn't exist, store in session storage instead
     if (checkError && checkError.code === 'PGRST205') {
       console.log('user_documents table not found. Storing metadata in session.');
-      
+
       // Store in session/local storage as fallback
       const documentData = {
         id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
@@ -344,15 +343,15 @@ async function storeDocumentMetadata(metadata) {
         extracted_text_length: metadata.extractedTextLength,
         created_at: new Date().toISOString()
       };
-      
+
       // Store in sessionStorage
       const existingDocs = JSON.parse(sessionStorage.getItem('user_documents') || '[]');
       existingDocs.push(documentData);
       sessionStorage.setItem('user_documents', JSON.stringify(existingDocs));
-      
+
       return documentData;
     }
-    
+
     // If table exists, proceed with database insert
     const { data, error } = await supabase
       .from('user_documents')
@@ -387,18 +386,18 @@ async function storeDocumentMetadata(metadata) {
         extracted_text_length: metadata.extractedTextLength,
         created_at: new Date().toISOString()
       };
-      
+
       const existingDocs = JSON.parse(sessionStorage.getItem('user_documents') || '[]');
       existingDocs.push(documentData);
       sessionStorage.setItem('user_documents', JSON.stringify(existingDocs));
-      
+
       return documentData;
     }
 
     return data;
   } catch (error) {
     console.error('Error storing document metadata:', error);
-    
+
     // Fallback to session storage
     const documentData = {
       id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
@@ -412,11 +411,11 @@ async function storeDocumentMetadata(metadata) {
       extracted_text_length: metadata.extractedTextLength,
       created_at: new Date().toISOString()
     };
-    
+
     const existingDocs = JSON.parse(sessionStorage.getItem('user_documents') || '[]');
     existingDocs.push(documentData);
     sessionStorage.setItem('user_documents', JSON.stringify(existingDocs));
-    
+
     return documentData;
   }
 }
@@ -429,25 +428,25 @@ async function storeDocumentMetadata(metadata) {
  */
 export async function processMultipleFiles(files, userId) {
   const results = [];
-  
+
   for (const file of files) {
     const result = await processFile(file, userId);
     results.push(result);
   }
-  
+
   // Combine all markdown content if multiple files
   if (results.length > 1) {
     const combinedMarkdown = results
       .filter(r => r.success && r.markdownContent)
       .map(r => r.markdownContent)
       .join('\n\n---\n\n');
-    
+
     return {
       results,
       combinedMarkdown,
       allSuccess: results.every(r => r.success)
     };
   }
-  
+
   return results;
 }

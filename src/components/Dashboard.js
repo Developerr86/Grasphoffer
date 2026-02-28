@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getRecentSessions, getSessionResumeData } from '../lib/sessionService';
-import { detectTopicFromContent } from '../lib/gemini';
 import { getDisplayName } from '../lib/userProfileService';
 import TopicInput from './TopicInput';
-import FileUpload from './FileUpload';
 import SessionTypeSelector from './SessionTypeSelector';
 import ExamDrillSetup from './ExamDrillSetup';
-import NeoButton from './ui/NeoButton';
-import NeoCard from './ui/NeoCard';
-import NeoBadge from './ui/NeoBadge';
 
 // Import newly downloaded assets for the brutalist layout
 import lightningImg from '../assets/images/lightning.png';
@@ -19,13 +14,15 @@ import stopwatchImg from '../assets/images/stopwatch.png';
 
 const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodcasts }) => {
   const { user, signOut } = useAuth();
-  const [inputMethod, setInputMethod] = useState('topic');
   const [displayName, setDisplayName] = useState('');
   const [sessionType, setSessionType] = useState('exam-drill');
   const [currentStep, setCurrentStep] = useState('dashboard');
   const [recentSessions, setRecentSessions] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const handleSessionTypeChange = (type) => {
+    setSessionType(type);
+  };
   const toggleDarkMode = (e) => {
     // Check for browser support and user preference for reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -70,48 +67,6 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
     });
   };
 
-  const handleTopicSubmit = (topic) => {
-    console.log('Topic submitted:', topic);
-    setCurrentStep('session-type');
-    window.selectedTopic = topic;
-  };
-
-  const handleFilesSubmit = async (filesData) => {
-    if (filesData.hasProcessedContent && filesData.markdownContent) {
-      try {
-        const topicInfo = await detectTopicFromContent(filesData.markdownContent);
-        window.selectedFiles = { ...filesData, detectedTopic: topicInfo.topic, topicInfo };
-        window.selectedTopic = topicInfo.topic;
-      } catch (error) {
-        window.selectedFiles = filesData;
-        window.selectedTopic = 'Uploaded Content';
-      }
-    } else {
-      window.selectedFiles = filesData;
-      window.selectedTopic = 'Uploaded Content';
-    }
-    setCurrentStep('session-type');
-  };
-
-  const handleSessionTypeChange = (type) => {
-    setSessionType(type);
-  };
-
-  const handleStartLearning = () => {
-    // Legacy support from original implementation
-    if (inputMethod === 'topic' && window.selectedTopic) {
-      onStartLearning && onStartLearning({ type: sessionType, topic: window.selectedTopic });
-    } else if (inputMethod === 'files' && window.selectedFiles) {
-      const topic = window.selectedFiles.detectedTopic || window.selectedTopic || 'Uploaded Content';
-      onStartLearning && onStartLearning({
-        type: sessionType,
-        topic: topic,
-        files: window.selectedFiles,
-        markdownContent: window.selectedFiles.markdownContent,
-        topicInfo: window.selectedFiles.topicInfo
-      });
-    }
-  };
 
   useEffect(() => {
     const loadDashboardData = async () => {
