@@ -492,7 +492,7 @@
 }
 
 .stat-label {
-  color: black;
+  color: var(--text-main);
   font-weight: 700;
   font-size: 1.25rem;
 }
@@ -540,9 +540,28 @@
 }
 
 .modal-container {
-  width: 100%;
-  max-width: 40rem;
+  width: 90%;
+  max-width: 64rem;
   margin: 1rem;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-container .neo-card {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-container .neo-card>div:not(.modal-header):not(.modal-footer) {
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  /* Space for scrollbar */
+  flex: 1;
+  min-height: 0;
+  /* Important for nested flex scroll */
 }
 
 .modal-header {

@@ -3,9 +3,12 @@
 :root {
   /* Color Palette */
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F4F4F5; /* Light Off-White */
-  --accent-yellow: #FFD700; /* Vibrant Gen Z Yellow */
-  --accent-green: #00C853; /* Fresh Kelly/Emerald Green */
+  --bg-secondary: #F4F4F5;
+  /* Light Off-White */
+  --accent-yellow: #FFD700;
+  /* Vibrant Gen Z Yellow */
+  --accent-green: #00C853;
+  /* Fresh Kelly/Emerald Green */
   --text-main: #000000;
   --text-secondary: #333333;
   --border-color: #000000;
@@ -18,13 +21,20 @@
   --radius-pill: 9999px;
   --radius-card: 24px;
   --radius-sm: 12px;
-  
+
   /* Shadows & Borders */
   --shadow-hard: 4px 4px 0px 0px #000000;
   --shadow-hard-sm: 2px 2px 0px 0px #000000;
   --shadow-hard-lg: 8px 8px 0px 0px #000000;
   --border-width: 2px;
   --border-width-bold: 3px;
+}
+
+html.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #27272a;
+  --text-main: #ffffff;
+  --text-secondary: #a1a1aa;
 }
 
 * {
@@ -41,7 +51,12 @@ body {
   line-height: 1.5;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   margin-top: 0;
@@ -75,18 +90,54 @@ code {
   padding: 0 20px;
 }
 
-.text-center { text-align: center; }
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.gap-4 { gap: 1rem; }
-.gap-8 { gap: 2rem; }
-.mt-4 { margin-top: 1rem; }
-.mb-4 { margin-bottom: 1rem; }
-.p-4 { padding: 1rem; }
-.w-full { width: 100%; }
+.text-center {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.w-full {
+  width: 100%;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {

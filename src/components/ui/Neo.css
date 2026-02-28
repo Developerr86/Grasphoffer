@@ -267,6 +267,10 @@
 
 .neo-btn-full {
     width: 100%;
+    white-space: normal;
+    height: auto;
+    min-height: 3rem;
+    line-height: 1.2;
 }
 
 /* NeoCard */

@@ -5,6 +5,7 @@ import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 import DepthLearningSession from './components/DepthLearningSession';
 import FastLearningSession from './components/FastLearningSession';
+import ExamDrillSession from './components/ExamDrillSession';
 import Profile from './components/Profile';
 import TheHopperPage from './components/TheHopperPage';
 import PodcastPage from './components/PodcastPage';
@@ -72,6 +73,13 @@ const AppContent = () => {
         <DepthLearningSession
           topic={learningData.topic || 'Uploaded Content'}
           resumeData={learningData.resumeData}
+          onBack={handleBackToDashboard}
+        />
+      );
+    } else if (learningData.type === 'exam-drill') {
+      return (
+        <ExamDrillSession
+          topic={learningData.topic || 'Exam Drill'}
           onBack={handleBackToDashboard}
         />
       );

@@ -2,6 +2,7 @@ import React from 'react';
 import './SessionTypeSelector.css';
 import boltIcon from '../assets/icons/Lightning-bolt.PNG';
 import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
+import targetIcon from '../assets/icons/Target-board.PNG';
 import checkIcon from '../assets/icons/green-tick.PNG';
 
 const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) => {
@@ -17,7 +18,8 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
         '15 assessment questions',
         'Quick completion (~15 mins)'
       ],
-      color: '#f59e0b'
+      color: '#f59e0b',
+      disabled: true
     },
     {
       id: 'depth',
@@ -30,23 +32,35 @@ const SessionTypeSelector = ({ selectedType, onTypeChange, disabled = false }) =
         'Multiple evaluation cycles',
         'Thorough mastery (~45 mins)'
       ],
-      color: '#10b981'
+      color: '#10b981',
+      disabled: true
+    },
+    {
+      id: 'exam-drill',
+      name: 'Exam Drill',
+      icon: <img src={targetIcon} alt="Exam Drill" style={{ width: '24px', height: '24px' }} />,
+      description: 'Practice with real question papers',
+      features: [
+        'Upload question papers (PDFs)',
+        'Timed drill sessions',
+        'Answer evaluation & scoring',
+        'Targeted exam preparation'
+      ],
+      color: '#8b5cf6',
+      disabled: false
     }
   ];
 
   return (
     <div className="session-type-selector">
-      <div className="selector-header">
-        <h3>Choose Your Learning Style</h3>
-        <p>Select the type of learning session that fits your needs</p>
-      </div>
+
 
       <div className="session-types-grid">
         {sessionTypes.map((type) => (
           <div
             key={type.id}
-            className={`session-type-card ${selectedType === type.id ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
-            onClick={() => !disabled && onTypeChange(type.id)}
+            className={`session-type-card ${selectedType === type.id ? 'selected' : ''} ${type.disabled || disabled ? 'disabled' : ''}`}
+            onClick={() => !type.disabled && !disabled && onTypeChange(type.id)}
             style={{ '--accent-color': type.color }}
           >
             <div className="session-type-header">

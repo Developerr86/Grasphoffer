@@ -7,8 +7,9 @@ import {
   DEFAULT_LANGUAGES
 } from './tesseractConfig';
 
-// Configure PDF.js worker to use local file
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+// Configure PDF.js worker to use the correct version from public folder
+// The worker file must match the pdfjs-dist version (5.4.54)
+pdfjsLib.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL || ''}/pdf.worker.min.js`;
 
 // File size and page limits
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB

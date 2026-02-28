@@ -1,56 +1,36 @@
 /* Modern Session Type Selector - Soft Neobrutalism */
 .session-type-selector {
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.selector-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.selector-header h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--text-main);
-  margin: 0 0 0.5rem 0;
-}
-
-.selector-header p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-  font-weight: 500;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .session-types-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
+  padding: 0.5rem;
+  /* Prevent shadow clipping */
 }
 
-@media (min-width: 768px) {
-  .session-types-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
+/* No query needed for grid columns due to auto-fit */
 
 .session-type-card {
   background: #FFFFFF;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-card);
-  padding: 2rem;
+  padding: 1.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  min-height: 320px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-hard-sm);
+  height: 100%;
+  /* Fill the grid cell */
 }
 
 .session-type-card:hover:not(.disabled) {
@@ -67,10 +47,19 @@
 }
 
 .session-type-card.disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   background-color: #f3f4f6;
   box-shadow: none;
+}
+
+.session-type-card.disabled .session-type-info h4::after {
+  content: ' (Coming Soon)';
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: block;
+  margin-top: 0.25rem;
 }
 
 .session-type-header {
@@ -79,13 +68,13 @@
   align-items: center;
   text-align: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .session-type-icon {
   font-size: 2rem;
   flex-shrink: 0;
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: var(--accent-yellow);
   border: var(--border-width) solid var(--border-color);
   border-radius: 50%;
@@ -93,18 +82,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 60px;
+  /* Fixed size for consistency */
+  height: 60px;
 }
 
 .session-type-card:nth-child(2) .session-type-icon {
   background-color: var(--accent-green);
 }
 
+.session-type-card:nth-child(3) .session-type-icon {
+  background-color: var(--accent-purple, #8b5cf6);
+}
+
 .session-type-info {
   flex: 1;
+  width: 100%;
 }
 
 .session-type-info h4 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 900;
   color: var(--text-main);
   margin: 0 0 0.5rem 0;
@@ -112,9 +109,9 @@
 
 .session-type-info p {
   color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.4;
   font-weight: 500;
 }
 
@@ -122,8 +119,8 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   border: var(--border-width) solid var(--border-color);
   display: flex;
@@ -146,36 +143,41 @@
 
 .session-type-features {
   flex: 1;
+  /* Pushes content to fill space */
   display: flex;
   flex-direction: column;
-  justify-content: center;
   border-top: var(--border-width) solid var(--border-color);
-  padding-top: 1.5rem;
+  padding-top: 1.25rem;
+  margin-top: auto;
+  /* Push to bottom if header is short */
 }
 
 .session-type-features ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .session-type-features li {
   color: var(--text-main);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  /* Align top for multi-line text */
+  gap: 0.5rem;
   font-weight: 500;
+  text-align: left;
 }
 
 .session-type-features li::before {
   content: '';
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
   background-image: url('../assets/icons/green-tick.PNG');
-  background-size: 0.75rem 0.75rem;
+  background-size: 0.6rem 0.6rem;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 50%;
@@ -185,45 +187,23 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-top: 0.1rem;
+  /* Align with text */
 }
 
 .selection-summary {
-  text-align: center;
-  margin-top: 2rem;
+  display: none;
+  /* Hide for cleaner UI, or style simpler */
 }
 
-.selected-type-summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background: #FFFFFF;
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-pill);
-  color: var(--text-main);
-  font-size: 1rem;
-  box-shadow: var(--shadow-hard-sm);
-}
-
-.summary-icon {
-  display: flex;
-  align-items: center;
-}
-
-.summary-text strong {
-  color: var(--text-main);
-  font-weight: 800;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive adjustments */
+@media (max-width: 640px) {
   .session-types-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .session-type-card {
-    padding: 1.5rem;
-    min-height: auto;
+    padding: 1.25rem;
   }
 }

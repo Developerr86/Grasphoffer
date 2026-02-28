@@ -1,0 +1,138 @@
+/* Exam Drill Setup Modal Content */
+.exam-drill-setup {
+  width: 100%;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.papers-section {
+  margin-bottom: 1.5rem;
+}
+
+.papers-list-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin: 0 0 1rem 0;
+  color: var(--text-main);
+}
+
+.papers-loading {
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.papers-loading p {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 0;
+}
+
+.no-papers-message {
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.no-papers-message p {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 0;
+}
+
+.papers-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.papers-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.papers-grid::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.papers-grid::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.paper-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #FFFFFF;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.paper-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+}
+
+.paper-item.selected {
+  background-color: #eff6ff;
+  border-color: var(--accent-blue, #3b82f6);
+}
+
+.paper-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.paper-item.selected .paper-checkbox {
+  background-color: var(--accent-green);
+}
+
+.paper-icon {
+  flex-shrink: 0;
+}
+
+.paper-name {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-section {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.processor-section {
+  margin: 1rem 0;
+}
+
+.drill-start-section {
+  margin-top: 1.5rem;
+}

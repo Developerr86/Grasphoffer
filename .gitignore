@@ -57,3 +57,6 @@ test_groq.py
 env_Backend
 
 podcast
+
+temp_dashboard.html
+.claude

@@ -15,11 +15,7 @@ const TopicInput = ({ onTopicSubmit, disabled = false }) => {
   return (
     <div className="topic-input-container">
       <div className="input-method-card">
-        <div className="input-method-header">
-          <div className="input-method-icon"><img src={targetIcon} alt="Topic" style={{ width: '48px', height: '48px' }} /></div>
-          <h3>Enter a Topic</h3>
-          <p>Type in what you want to learn about</p>
-        </div>
+
 
         <form onSubmit={handleSubmit} className="topic-form">
           <div className="topic-input-group">

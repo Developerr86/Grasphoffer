@@ -1,0 +1,95 @@
+/* Exam Drill Session - Placeholder styles */
+.exam-drill-session-container {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  padding: 2rem;
+  position: relative;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-drill-session-container .nav-menu {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 12px;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-hard-sm);
+  transition: all 0.2s ease;
+}
+
+.exam-drill-session-container .nav-menu:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+}
+
+.exam-drill-session-container .placeholder-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.exam-drill-session-container .title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.exam-drill-session-container .topic-display {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  background: #FFFFFF;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.exam-drill-session-container .placeholder-message {
+  background: #FFFFFF;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 2rem 3rem;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.exam-drill-session-container .placeholder-message p {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.exam-drill-session-container .exit-button {
+  padding: 1rem 2rem;
+  background-color: var(--accent-yellow);
+  color: var(--text-main);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-hard-sm);
+  transition: all 0.2s ease;
+}
+
+.exam-drill-session-container .exit-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hard);
+}
+
+.exam-drill-session-container .exit-button:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}

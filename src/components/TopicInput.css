@@ -1,53 +1,18 @@
 /* Modern Topic Input Component - Soft Neobrutalism */
 .topic-input-container {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem 0;
 }
 
 .input-method-card {
   background: transparent;
   border-radius: 0;
-  padding: 2rem 0;
+  padding: 0;
   border: none;
   box-shadow: none;
   text-align: center;
-}
-
-.input-method-header {
-  margin-bottom: 2rem;
-}
-
-.input-method-icon {
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: var(--accent-yellow);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: 50%;
-  box-shadow: var(--shadow-hard-sm);
-  overflow: hidden;
-}
-
-.input-method-header h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--text-main);
-  margin: 0 0 0.5rem 0;
-}
-
-.input-method-header p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-  font-weight: 500;
+  width: 100%;
 }
 
 /* Topic Input Group */
@@ -65,7 +30,8 @@
   flex: 1;
   padding: 1rem 1.5rem;
   border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-input);
+  border-radius: var(--radius-card);
+  /* Match button roundness */
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -73,6 +39,7 @@
   color: var(--text-main);
   outline: none;
   box-shadow: var(--shadow-hard-sm);
+  width: 100%;
 }
 
 .topic-input-field::placeholder {
@@ -93,17 +60,20 @@
 }
 
 .topic-submit-button {
-  padding: 1rem 1.5rem;
+  padding: 1rem 2rem;
   background-color: var(--accent-purple);
   color: var(--text-main);
   border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-btn);
+  border-radius: var(--radius-card);
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   box-shadow: var(--shadow-hard-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .topic-submit-button:hover:not(:disabled) {
@@ -133,13 +103,14 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-align: left;
 }
 
 .example-topics {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .example-topic {
@@ -178,16 +149,5 @@
   .topic-input-group {
     flex-direction: row;
     align-items: stretch;
-  }
-
-  .topic-input-field {
-    flex: 1;
-  }
-
-  .topic-submit-button {
-    align-self: stretch;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
   }
 }
