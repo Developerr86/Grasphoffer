@@ -7,7 +7,6 @@ import './TheHopperPage.css';
 
 // Icons
 import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
-import logoutIcon from '../assets/icons/Log-Out.PNG';
 
 const TheHopperPage = ({ onBack }) => {
   const { user } = useAuth();

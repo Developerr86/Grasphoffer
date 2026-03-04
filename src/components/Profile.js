@@ -6,14 +6,11 @@ import { getMostStruggledTopics } from '../lib/topicStruggleService';
 import { getComprehensiveAnalytics } from '../lib/analyticsService';
 import { calculateAchievements, calculateUserLevel } from '../lib/achievementService';
 import NeoButton from './ui/NeoButton';
-import NeoCard from './ui/NeoCard';
 import NeoBadge from './ui/NeoBadge';
 import NeoInput from './ui/NeoInput';
 import './Profile.css';
 
 // Icons
-import hopperIcon from '../assets/icons/TheHopper_Icon.PNG';
-import homeIcon from '../assets/icons/home.png';
 import userIcon from '../assets/icons/User_icon.PNG';
 import targetIcon from '../assets/icons/Target-board.PNG';
 import treeIcon from '../assets/icons/knowledge-tree-icon.PNG';
