@@ -87,7 +87,7 @@ const AppContent = () => {
   }
 
   if (currentView === 'profile') {
-    return <Profile key={profileViewKey} onBack={handleBackToDashboard} />;
+    return <Profile key={profileViewKey} onBack={handleBackToDashboard} onOpenTheHopper={handleOpenTheHopper} onOpenPodcasts={handleOpenPodcasts} />;
   }
 
   if (currentView === 'thehopper') {

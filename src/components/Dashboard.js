@@ -157,7 +157,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
       {/* MODALS RENDERED AS OVERLAYS IF NEEDED */}
       {currentStep !== 'dashboard' && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white dark:bg-zinc-900 brutal-border brutal-shadow rounded-[2rem] p-8 max-w-2xl w-full relative">
+          <div className="bg-white dark:bg-zinc-900 brutal-border brutal-shadow rounded-[2rem] p-8 max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
             <button onClick={() => setCurrentStep(currentStep === 'topic-input' || currentStep === 'exam-drill-setup' ? 'session-type' : 'dashboard')} className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center brutal-border brutal-shadow-sm rounded-full bg-red-400 hover:bg-red-500 font-bold">✕</button>
 
             {currentStep === 'session-type' && (

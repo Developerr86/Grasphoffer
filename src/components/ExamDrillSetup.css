@@ -73,7 +73,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: #FFFFFF;
+  background: var(--bg-primary);
   border: var(--border-width) solid var(--border-color);
   border-radius: 16px;
   cursor: pointer;
@@ -87,7 +87,7 @@
 }
 
 .paper-item.selected {
-  background-color: #eff6ff;
+  background-color: var(--bg-secondary);
   border-color: var(--accent-blue, #3b82f6);
 }
 
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFFFFF;
+  background: var(--bg-primary);
   flex-shrink: 0;
 }
 
