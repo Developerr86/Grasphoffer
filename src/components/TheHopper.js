@@ -67,7 +67,7 @@ const TheHopper = ({ onClose }) => {
           {
             id: 1,
             type: 'hopper',
-            content: `![Hopper](${hopperIcon}) **TheHopper is ready to help!**\n\nI have access to:\n• ${result.metadata.documentCount} uploaded documents\n• ${result.metadata.flashcardCount} generated flashcards\n• ${result.metadata.struggleCount} areas you're working on\n• ${result.metadata.sessionCount} learning sessions\n\nAsk me anything about your learning materials, or get help with concepts you find challenging!`,
+            content: `![Hopper](${hopperIcon}) **TheHopper is temporarily unavailable.**\n\nThe AI assistant is currently being upgraded. Please check back soon!`,
             timestamp: new Date()
           }
         ]);
@@ -197,7 +197,7 @@ const TheHopper = ({ onClose }) => {
           return {
             id: msg.id,
             type: 'hopper',
-            content: `![Error](${logoutIcon}) **RAG Backend Connection Error**\n\n${error.message}\n\n**Troubleshooting Steps:**\n• Ensure backend server is running: \`npm run server\`\n• Check server is accessible at: \`http://localhost:3002\`\n• Verify Groq API key is set in .env file\n• Check browser console for detailed error logs`,
+            content: `**Something went wrong.** ${error.message}`,
             timestamp: new Date()
           };
         }

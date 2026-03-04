@@ -79,7 +79,7 @@ const AppContent = () => {
     } else if (learningData.type === 'exam-drill') {
       return (
         <ExamDrillSession
-          topic={learningData.topic || 'Exam Drill'}
+          papers={learningData.papers || []}
           onBack={handleBackToDashboard}
         />
       );

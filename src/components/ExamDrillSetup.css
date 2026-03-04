@@ -1,110 +1,149 @@
-/* Exam Drill Setup Modal Content */
+/* ─── ExamDrillSetup ────────────────────────────────────────────────────── */
+
 .exam-drill-setup {
-  width: 100%;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
+/* ── Paper list ── */
 .papers-section {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .papers-list-title {
-  font-size: 1.25rem;
-  font-weight: 900;
-  margin: 0 0 1rem 0;
-  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
 .papers-loading {
-  background: var(--bg-secondary);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-card);
-  padding: 2rem;
-  text-align: center;
-  box-shadow: var(--shadow-hard-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  color: var(--text-secondary, #6b7280);
 }
 
-.papers-loading p {
-  color: var(--text-secondary);
-  font-weight: 500;
-  margin: 0;
+.setup-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .no-papers-message {
-  background: var(--bg-secondary);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-card);
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
-  box-shadow: var(--shadow-hard-sm);
-}
-
-.no-papers-message p {
-  color: var(--text-secondary);
-  font-weight: 500;
-  margin: 0;
+  color: var(--text-secondary, #6b7280);
+  border: 2px dashed #d1d5db;
+  border-radius: 16px;
+  font-size: 0.95rem;
 }
 
 .papers-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-height: 300px;
+  gap: 0.5rem;
+  max-height: 280px;
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding-right: 4px;
 }
 
-.papers-grid::-webkit-scrollbar {
-  width: 6px;
-}
-
-.papers-grid::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 3px;
-}
-
-.papers-grid::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
-}
-
+/* ── Paper item card ── */
 .paper-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: var(--bg-primary);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: 16px;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 2.5px solid #000;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 3px 3px 0 #000;
+  position: relative;
 }
 
-.paper-item:hover {
+.dark .paper-item {
+  background: #27272a;
+  border-color: #fff;
+  box-shadow: 3px 3px 0 #fff;
+}
+
+.paper-item:hover:not(.drilled):not(.deleting) {
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hard);
+  box-shadow: 5px 5px 0 #000;
+}
+
+.dark .paper-item:hover:not(.drilled):not(.deleting) {
+  box-shadow: 5px 5px 0 #fff;
 }
 
 .paper-item.selected {
-  background-color: var(--bg-secondary);
-  border-color: var(--accent-blue, #3b82f6);
+  background: #a3e635;
+  border-color: #000;
 }
 
+.dark .paper-item.selected {
+  background: #3f6212;
+}
+
+.paper-item.drilled {
+  opacity: 0.65;
+  cursor: default;
+  background: #f3f4f6;
+  border-style: dashed;
+}
+
+.dark .paper-item.drilled {
+  background: #3f3f46;
+}
+
+.paper-item.deleting {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Checkbox area ── */
 .paper-checkbox {
-  width: 1.5rem;
-  height: 1.5rem;
-  border: var(--border-width) solid var(--border-color);
+  width: 22px;
+  height: 22px;
+  border: 2px solid #000;
   border-radius: 6px;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary);
   flex-shrink: 0;
 }
 
-.paper-item.selected .paper-checkbox {
-  background-color: var(--accent-green);
+.dark .paper-checkbox {
+  background: #3f3f46;
+  border-color: #d4d4d8;
+}
+
+.drilled-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #059669;
+  white-space: nowrap;
+  padding: 1px 4px;
+  background: #d1fae5;
+  border-radius: 4px;
+  line-height: 1;
 }
 
 .paper-icon {
@@ -112,27 +151,122 @@
 }
 
 .paper-name {
+  flex: 1;
   font-weight: 600;
-  color: var(--text-main);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.upload-section {
-  margin: 1.5rem 0;
+/* ── Delete button ── */
+.paper-delete-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0.4;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  line-height: 1;
+}
+
+.paper-item:hover .paper-delete-btn {
+  opacity: 1;
+  background: #fee2e2;
+}
+
+/* ── Delete confirm overlay ── */
+.delete-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.delete-confirm-box {
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  box-shadow: 6px 6px 0 #000;
+  max-width: 360px;
+  width: 90%;
   text-align: center;
 }
 
+.dark .delete-confirm-box {
+  background: #27272a;
+  border-color: #fff;
+  box-shadow: 6px 6px 0 #fff;
+  color: #fff;
+}
+
+.delete-confirm-box p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+
+.delete-warn {
+  font-size: 0.85rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.delete-cancel-btn,
+.delete-confirm-btn {
+  padding: 0.5rem 1.5rem;
+  border: 2.5px solid #000;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #000;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.delete-cancel-btn:hover,
+.delete-confirm-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 #000;
+}
+
+.delete-cancel-btn {
+  background: #f3f4f6;
+}
+
+.delete-confirm-btn {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* ── Upload / processor / start ── */
 .hidden-file-input {
   display: none;
 }
 
+.upload-section {
+  display: flex;
+  justify-content: center;
+}
+
 .processor-section {
-  margin: 1rem 0;
+  margin-top: 0.5rem;
 }
 
 .drill-start-section {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
 }

@@ -46,7 +46,7 @@ lerna-debug.log*
 .vercel
 
 supabase/
-*.md 
+*.md
 
 documents/
 faiss_index/

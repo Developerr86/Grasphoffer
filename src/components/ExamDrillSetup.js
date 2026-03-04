@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
+import { checkIfAnswersExist, deletePaper } from '../lib/examDrillService';
 import FileProcessor from './FileProcessor';
 import NeoButton from './ui/NeoButton';
 import './ExamDrillSetup.css';
@@ -13,17 +14,11 @@ const ExamDrillSetup = ({ onStartDrill }) => {
   const [selectedPapers, setSelectedPapers] = useState([]);
   const [filesToProcess, setFilesToProcess] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // paperId to confirm delete
+  const [deleting, setDeleting] = useState(null); // paperId being deleted
   const fileInputRef = useRef(null);
 
-  // Load previously uploaded papers from Supabase storage on mount
-  useEffect(() => {
-    if (user) {
-      loadExistingPapers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const loadExistingPapers = async () => {
+  const loadExistingPapers = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase.storage
@@ -35,40 +30,57 @@ const ExamDrillSetup = ({ onStartDrill }) => {
       if (error) {
         console.error('Error loading papers:', error);
       } else if (data) {
-        const existingPapers = data
-          .filter(file => file.name.endsWith('.md'))
-          .map(file => ({
-            id: file.id || file.name,
-            fileName: file.name.replace(/^\d+_/, '').replace(/\.md$/, ''),
-            storagePath: `${user.id}/${file.name}`,
-            createdAt: file.created_at,
-            isExisting: true
-          }));
-        setPapers(existingPapers);
+        // Only show source papers (not answers_ files)
+        const sourcePapers = data.filter(
+          (file) => file.name.endsWith('.md') && !file.name.startsWith('answers_')
+        );
+
+        // Check each paper for existing answers
+        const papersWithStatus = await Promise.all(
+          sourcePapers.map(async (file) => {
+            const storagePath = `${user.id}/${file.name}`;
+            const hasAnswers = await checkIfAnswersExist(storagePath);
+            return {
+              id: file.id || file.name,
+              fileName: file.name.replace(/^\d+_/, '').replace(/\.md$/, ''),
+              rawName: file.name,
+              storagePath,
+              createdAt: file.created_at,
+              isExisting: true,
+              hasAnswers,
+            };
+          })
+        );
+
+        setPapers(papersWithStatus);
       }
     } catch (err) {
       console.error('Error fetching papers:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadExistingPapers();
+    }
+  }, [user, loadExistingPapers]);
 
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files).filter(
-      f => f.type === 'application/pdf'
+      (f) => f.type === 'application/pdf'
     );
     if (files.length > 0) {
       setFilesToProcess(files);
     }
-    // Reset file input so the same file can be re-selected
     event.target.value = '';
   };
 
   const handleProcessingComplete = (resultData) => {
-    // Handle both single and multi-file results
     let processedFiles = [];
     if (resultData.results && Array.isArray(resultData.results)) {
-      processedFiles = resultData.results.filter(r => r.success);
+      processedFiles = resultData.results.filter((r) => r.success);
     } else if (resultData.success) {
       processedFiles = [resultData];
     }
@@ -76,26 +88,53 @@ const ExamDrillSetup = ({ onStartDrill }) => {
     const newPapers = processedFiles.map((f, i) => ({
       id: `paper-${Date.now()}-${i}`,
       fileName: f.fileName || `Paper ${papers.length + i + 1}`,
+      rawName: '',
       storagePath: f.storageInfo?.path || '',
       markdownContent: f.markdownContent,
       markdownUrl: f.markdownUrl,
-      isExisting: false
+      isExisting: false,
+      hasAnswers: false,
     }));
 
-    setPapers(prev => [...newPapers, ...prev]);
+    setPapers((prev) => [...newPapers, ...prev]);
     setFilesToProcess([]);
   };
 
-  const togglePaperSelection = (paperId) => {
-    setSelectedPapers(prev =>
-      prev.includes(paperId)
-        ? prev.filter(id => id !== paperId)
-        : [...prev, paperId]
+  const togglePaperSelection = (paper) => {
+    if (paper.hasAnswers) return; // Already drilled – cannot select
+    setSelectedPapers((prev) =>
+      prev.includes(paper.id)
+        ? prev.filter((id) => id !== paper.id)
+        : [...prev, paper.id]
     );
   };
 
+  const handleDeleteRequest = (e, paperId) => {
+    e.stopPropagation();
+    setDeleteConfirm(paperId);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm) return;
+    const paper = papers.find((p) => p.id === deleteConfirm);
+    if (!paper) return;
+
+    setDeleting(deleteConfirm);
+    setDeleteConfirm(null);
+
+    try {
+      await deletePaper(paper.storagePath);
+      setPapers((prev) => prev.filter((p) => p.id !== paper.id));
+      setSelectedPapers((prev) => prev.filter((id) => id !== paper.id));
+    } catch (err) {
+      console.error('Delete failed:', err);
+    } finally {
+      setDeleting(null);
+    }
+  };
+
   const handleStartDrill = () => {
-    const selected = papers.filter(p => selectedPapers.includes(p.id));
+    const selected = papers.filter((p) => selectedPapers.includes(p.id));
     onStartDrill({ selectedPapers: selected });
   };
 
@@ -106,7 +145,8 @@ const ExamDrillSetup = ({ onStartDrill }) => {
 
         {loading ? (
           <div className="papers-loading">
-            <p>Loading your papers...</p>
+            <div className="setup-spinner" />
+            <p>Loading your papers…</p>
           </div>
         ) : papers.length === 0 ? (
           <div className="no-papers-message">
@@ -114,24 +154,68 @@ const ExamDrillSetup = ({ onStartDrill }) => {
           </div>
         ) : (
           <div className="papers-grid">
-            {papers.map(paper => (
-              <div
-                key={paper.id}
-                className={`paper-item ${selectedPapers.includes(paper.id) ? 'selected' : ''}`}
-                onClick={() => togglePaperSelection(paper.id)}
-              >
-                <div className="paper-checkbox">
-                  {selectedPapers.includes(paper.id) && (
-                    <img src={checkIcon} alt="Selected" style={{ width: '16px', height: '16px' }} />
-                  )}
+            {papers.map((paper) => {
+              const isSelected = selectedPapers.includes(paper.id);
+              const isBeingDeleted = deleting === paper.id;
+
+              return (
+                <div
+                  key={paper.id}
+                  className={`paper-item ${isSelected ? 'selected' : ''} ${paper.hasAnswers ? 'drilled' : ''} ${isBeingDeleted ? 'deleting' : ''}`}
+                  onClick={() => togglePaperSelection(paper)}
+                >
+                  {/* Selection checkbox */}
+                  <div className="paper-checkbox">
+                    {isSelected && (
+                      <img src={checkIcon} alt="Selected" style={{ width: '16px', height: '16px' }} />
+                    )}
+                    {paper.hasAnswers && <span className="drilled-badge">✓ Drilled</span>}
+                  </div>
+
+                  <img
+                    src={treeIcon}
+                    alt="Paper"
+                    style={{ width: '24px', height: '24px' }}
+                    className="paper-icon"
+                  />
+                  <span className="paper-name">{paper.fileName}</span>
+
+                  {/* Delete button */}
+                  <button
+                    className="paper-delete-btn"
+                    onClick={(e) => handleDeleteRequest(e, paper.id)}
+                    title="Delete paper"
+                    disabled={isBeingDeleted}
+                  >
+                    {isBeingDeleted ? '…' : '🗑'}
+                  </button>
                 </div>
-                <img src={treeIcon} alt="PDF" style={{ width: '24px', height: '24px' }} className="paper-icon" />
-                <span className="paper-name">{paper.fileName}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Delete confirmation dialog */}
+      {deleteConfirm && (
+        <div className="delete-confirm-overlay" onClick={() => setDeleteConfirm(null)}>
+          <div className="delete-confirm-box" onClick={(e) => e.stopPropagation()}>
+            <p>
+              Delete <strong>{papers.find((p) => p.id === deleteConfirm)?.fileName}</strong>?
+              <br />
+              <span className="delete-warn">This will also delete its saved answers.</span>
+            </p>
+            <div className="delete-confirm-actions">
+              <button className="delete-cancel-btn" onClick={() => setDeleteConfirm(null)}>
+                Cancel
+              </button>
+              <button className="delete-confirm-btn" onClick={handleDeleteConfirm}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Upload section */}
       <div className="upload-section">
@@ -148,7 +232,7 @@ const ExamDrillSetup = ({ onStartDrill }) => {
         </NeoButton>
       </div>
 
-      {/* File processor - shows progress when processing */}
+      {/* File processor – shows progress when processing */}
       {filesToProcess.length > 0 && (
         <div className="processor-section">
           <FileProcessor

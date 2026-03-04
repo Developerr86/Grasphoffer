@@ -208,37 +208,7 @@ export const recordQuestionAnswer = async (sessionId, questionIndex, userAnswer,
  * @returns {Promise<Object>} Recent sessions
  */
 export const getRecentSessions = async (limit = 3) => {
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('User not authenticated');
-
-    const { data, error } = await supabase
-      .from('learning_sessions')
-      .select(`
-        id,
-        session_type,
-        topic,
-        status,
-        total_flashcards,
-        studied_flashcards,
-        total_questions,
-        correct_answers,
-        final_score,
-        created_at,
-        completed_at,
-        updated_at
-      `)
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    if (error) throw error;
-
-    return { success: true, sessions: data || [] };
-  } catch (error) {
-    console.error('Error getting recent sessions:', error);
-    return { success: false, error: error.message, sessions: [] };
-  }
+  return { success: true, sessions: [] };
 };
 
 /**

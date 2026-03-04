@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 import { getRecentSessions, getSessionResumeData } from '../lib/sessionService';
 import { getDisplayName } from '../lib/userProfileService';
+import { loadAnswersFromStorage } from '../lib/examDrillService';
 import TopicInput from './TopicInput';
 import SessionTypeSelector from './SessionTypeSelector';
 import ExamDrillSetup from './ExamDrillSetup';
@@ -19,6 +21,7 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
   const [currentStep, setCurrentStep] = useState('dashboard');
   const [recentSessions, setRecentSessions] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [pastDrills, setPastDrills] = useState([]);
 
   const handleSessionTypeChange = (type) => {
     setSessionType(type);
@@ -81,14 +84,58 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
         console.error('Error loading dashboard data:', error);
       }
     };
+
+    const loadPastDrills = async () => {
+      try {
+        const { data } = await supabase.storage
+          .from('documents')
+          .list(user.id);
+        if (data) {
+          const answerFiles = data.filter((f) => f.name.startsWith('answers_') && f.name.endsWith('.md'));
+          const drills = answerFiles.map((f) => ({
+            id: f.id || f.name,
+            // derive original paper name by stripping 'answers_' prefix and '.md' suffix
+            fileName: f.name.replace(/^answers_/, '').replace(/^\d+_/, '').replace(/\.md$/, ''),
+            storagePath: `${user.id}/${f.name.replace(/^answers_/, '')}`,
+            answersStoragePath: `${user.id}/${f.name}`,
+            createdAt: f.created_at,
+          }));
+          setPastDrills(drills);
+        }
+      } catch (err) {
+        console.error('Error loading past drills:', err);
+      }
+    };
+
     if (user) {
       loadDashboardData();
+      loadPastDrills();
     }
     // Check initial dark mode from OS or class
     if (document.documentElement.classList.contains('dark')) {
       setIsDarkMode(true);
     }
   }, [user]);
+
+  const handleReviewDrill = async (drill) => {
+    // Load saved answers then open ExamDrillSession in revisit mode
+    try {
+      const savedQuestions = await loadAnswersFromStorage(drill.storagePath);
+      onStartLearning && onStartLearning({
+        type: 'exam-drill',
+        papers: [{
+          id: drill.id,
+          fileName: drill.fileName,
+          storagePath: drill.storagePath,
+          hasAnswers: true,
+          _savedQuestions: savedQuestions,
+        }],
+      });
+    } catch (err) {
+      console.error('Failed to load drill answers:', err);
+      alert('Could not load saved answers. The file may have been deleted.');
+    }
+  };
 
   const handleContinueSession = async (sessionId) => {
     try {
@@ -330,6 +377,34 @@ const Dashboard = ({ onStartLearning, onOpenProfile, onOpenTheHopper, onOpenPodc
             </div>
           </div>
         </div>
+
+        {/* PAST EXAM DRILLS */}
+        {pastDrills.length > 0 && (
+          <section className="mt-12 space-y-6">
+            <h4 className="text-2xl font-extrabold px-2">Past Exam Drills</h4>
+            <div className="flex flex-col gap-4">
+              {pastDrills.map((drill) => (
+                <div key={drill.id} className="bg-white dark:bg-zinc-900 brutal-border brutal-shadow rounded-3xl p-5 flex items-center gap-5">
+                  <div className="w-12 h-12 bg-purple-300 dark:bg-purple-700 rounded-full flex items-center justify-center brutal-border flex-shrink-0">
+                    <span className="material-symbols-outlined text-black dark:text-white font-bold">target</span>
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <h5 className="font-extrabold text-lg line-clamp-1">{drill.fileName}</h5>
+                    <p className="text-sm font-medium opacity-60">
+                      Completed {drill.createdAt ? new Date(drill.createdAt).toLocaleDateString() : ''}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleReviewDrill(drill)}
+                    className="px-5 py-2 bg-purple-300 dark:bg-purple-700 text-black dark:text-white brutal-border brutal-shadow-sm rounded-full font-bold hover:bg-purple-400 dark:hover:bg-purple-600 uppercase text-sm flex-shrink-0"
+                  >
+                    Review
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* RECOMMENDED FOR YOU GRID */}
         <section className="mt-12 space-y-8">

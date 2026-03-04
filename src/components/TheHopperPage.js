@@ -88,7 +88,7 @@ const TheHopperPage = ({ onBack }) => {
 
       const errorMessage = {
         id: Date.now() + 1,
-        text: `![Error](${logoutIcon}) **RAG Backend Error**\n\n${error.message}\n\n**Please ensure:**\n• Backend server is running: \`npm run server\`\n• Server is accessible at: \`http://localhost:3002\`\n• Check browser console for detailed logs`,
+        text: `**Something went wrong.** ${error.message}`,
         sender: 'ai',
         timestamp: new Date(),
         isError: true
