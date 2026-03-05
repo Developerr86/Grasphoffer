@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useAuth } from '../context/AuthContext';
 import {
   fetchPaperContent,
@@ -59,7 +60,7 @@ const QuestionCard = ({ question, index, isGenerating }) => {
 
       {/* Question text */}
       <div className="question-text">
-        <ReactMarkdown>{question.text}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{question.text}</ReactMarkdown>
       </div>
 
       {/* MCQ options */}
@@ -91,7 +92,7 @@ const QuestionCard = ({ question, index, isGenerating }) => {
               }}
             >
               <div className="answer-body" ref={answerRef}>
-                <ReactMarkdown>{question.answer}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{question.answer}</ReactMarkdown>
               </div>
             </div>
           </>

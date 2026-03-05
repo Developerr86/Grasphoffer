@@ -673,6 +673,63 @@
   margin: 0.5rem 0;
 }
 
+/* ── GFM Tables ── */
+.answer-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+  overflow-x: auto;
+  display: block;
+  border: 2px solid #000;
+  border-radius: 10px;
+}
+
+.answer-body thead {
+  background: #f3e8ff;
+  color: #3b0764;
+}
+
+.dark .answer-body thead {
+  background: #3b1f6b;
+  color: #e9d5ff;
+}
+
+.answer-body th,
+.answer-body td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dark .answer-body th,
+.dark .answer-body td {
+  border-color: #52525b;
+}
+
+.answer-body th {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.answer-body tbody tr:nth-child(even) {
+  background: #faf5ff;
+}
+
+.dark .answer-body tbody tr:nth-child(even) {
+  background: #27272a;
+}
+
+.answer-body tbody tr:hover {
+  background: #ede9fe;
+}
+
+.dark .answer-body tbody tr:hover {
+  background: #3f3f46;
+}
+
+
 .no-answer {
   color: #9ca3af;
   font-style: italic;

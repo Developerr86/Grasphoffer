@@ -316,8 +316,10 @@ const parseAnswersMd = (md) => {
                 .map((l) => l.replace(/^- /, ''));
         }
 
-        // Answer body
-        const answerMatch = section.match(/### Answer\n\n([\s\S]+?)(?=\n\n---|\s*$)/);
+        // Answer body — capture everything after "### Answer\n\n" to end of this
+        // section. Do NOT stop at "---" because the LLM uses horizontal rules as
+        // section separators inside the answer itself.
+        const answerMatch = section.match(/### Answer\n\n([\s\S]+)/);
         const answer = answerMatch ? answerMatch[1].trim() : '';
 
         questions.push({

@@ -20,6 +20,7 @@
     "react-dom": "^19.1.1",
     "react-markdown": "^10.1.0",
     "react-scripts": "^5.0.1",
+    "remark-gfm": "^4.0.1",
     "tesseract.js": "^6.0.1",
     "tesseract.js-core": "^6.1.2",
     "uuid": "^11.1.0",
@@ -63,6 +64,5 @@
     "nth-check": "^2.1.1",
     "postcss": "^8.4.31",
     "webpack-dev-server": "^4.15.1"
-  },
-  "devDependencies": {}
+  }
 }
