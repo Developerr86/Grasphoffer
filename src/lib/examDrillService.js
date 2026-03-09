@@ -257,11 +257,22 @@ export const generateLongAnswers = async (longQuestions, onProgress) => {
 Question:
 ${q.text}
 
-Provide a thorough, well-structured answer suitable for an exam. Use the following format:
-- Start with a clear direct answer or definition if applicable.
-- Elaborate with explanation, examples, diagrams (described in text), or derivations as needed.
-- Use Markdown formatting: **bold** for key terms, numbered or bulleted lists for steps/points, code blocks for formulas or code.
-- Keep the answer comprehensive but concise (aim for what a top student would write).`;
+Provide a thorough, well-structured answer suitable for an exam. Follow these formatting rules exactly:
+
+1. Start with a clear direct answer or definition.
+2. Elaborate with explanation, examples, and derivations as needed.
+3. Use Markdown: **bold** for key terms, numbered/bulleted lists for steps or points.
+4. For any TABLE of data or comparisons, use a Markdown GFM table.
+5. For any DIAGRAM (architecture, flowchart, process flow, sequence, etc.), generate it as a Mermaid code block using this syntax:
+   \`\`\`mermaid
+   flowchart TD
+     A[Start] --> B[Step]
+   \`\`\`
+   - Keep diagrams SIMPLE — max 10–12 nodes for flowcharts, max 6 participants for sequence diagrams.
+   - Use only these diagram types: flowchart, sequenceDiagram, classDiagram, or graph.
+   - Do NOT use ASCII art or plain text pseudo-diagrams; always use Mermaid.
+6. Keep the answer comprehensive but concise (aim for what a top student would write).`;
+
 
         const answer = await generateNvidiaResponse(prompt, [], {
             temperature: 0.4,
@@ -333,3 +344,124 @@ const parseAnswersMd = (md) => {
 
     return questions;
 };
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Memory Scaffold helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Build the storage path for a paper's scaffolds JSON file.
+ * e.g. "userId/paper.md" → "userId/scaffolds_paper.json"
+ */
+const getScaffoldsPath = (paperStoragePath) => {
+    const parts = paperStoragePath.split('/');
+    // Replace .md extension with .json for the scaffold file
+    const filename = parts[parts.length - 1].replace(/\.md$/, '.json');
+    const userId = parts.slice(0, parts.length - 1).join('/');
+    return `${userId}/scaffolds_${filename}`;
+};
+
+/**
+ * Call the LLM to produce a keyword memory scaffold for one answer.
+ * Returns plain text chains joined by " → " — NO markdown, NO headers.
+ * @param {string} questionText
+ * @param {string} answerText
+ * @returns {Promise<string>}
+ */
+export const generateMemoryScaffold = async (questionText, answerText) => {
+    const prompt = `You are a memory coach helping a student quickly memorise an exam answer using a keyword scaffold.
+
+TASK: Read the question and answer below, then output a KEYWORD MEMORY SCAFFOLD.
+
+OUTPUT FORMAT — follow this EXACTLY with no deviations:
+- Line 1: Topic title (3–6 words, plain text, NO punctuation except hyphens)
+- Blank line
+- Each subsequent line is one keyword chain, written as:
+    Concept → SubConcept → Detail + Detail → Outcome
+- For sub-topics, indent with two spaces then "→ SubTopic → Keyword"
+- Use " → " (space arrow space) to link keywords
+- Use " + " to join parallel concepts in the same node (e.g., "Loss + Theft")
+
+STRICT RULES — violating any rule makes the output useless:
+1. NO markdown headers. Do NOT write #, ##, ###, or #### anywhere.
+2. NO horizontal rules. Do NOT write --- or *** or ___.
+3. NO bullet points, dashes, or numbered lists. No "-", "*", or "1."
+4. NO full sentences. Keywords only — short noun phrases (2–4 words each).
+5. NO preamble, explanation, or closing remarks. Output the scaffold ONLY.
+6. TOTAL keywords across all chains: 20–35. Do not go below 15 or above 40.
+7. Each chain line must contain at least 3 keywords linked by " → ".
+
+GOOD EXAMPLE OUTPUT:
+Internet Infrastructure
+
+Physical Layer → Fiber Optic + Undersea Cables → 5G + Satellite
+Routing → BGP → Router → Path Selection → Traffic Engineering
+Protocols → TCP/IP → DNS → HTTP + HTTPS → Application Layer
+Governance → ICANN → IANA → IP Allocation → Domain Registry
+  → Standards Bodies → IETF + IEEE → Protocol Specs
+  → Regulation → GDPR + FCC → National Laws
+
+BAD EXAMPLES (do NOT do these):
+## Physical Layer — (this is a markdown header, forbidden)
+- Fiber optic cables — (this is a bullet list, forbidden)
+1. Internet uses TCP/IP — (this is a numbered list and a sentence, forbidden)
+--- — (horizontal rule, forbidden)
+
+Now generate the scaffold for:
+
+Question: ${questionText}
+
+Answer:
+${answerText.substring(0, 5000)}`;
+
+    return generateNvidiaResponse(prompt, [], { temperature: 0.25, max_tokens: 1200 });
+};
+
+/**
+ * Load all scaffolds for a paper. Returns map { questionId: scaffoldText }.
+ * Stored as JSON — immune to markdown header collisions.
+ * Returns {} if the scaffolds file doesn't exist yet.
+ * @param {string} paperStoragePath
+ * @returns {Promise<Object>}
+ */
+export const loadScaffoldsFromStorage = async (paperStoragePath) => {
+    const scaffoldsPath = getScaffoldsPath(paperStoragePath);
+    try {
+        const content = await fetchPaperContent(scaffoldsPath);
+        return JSON.parse(content);
+    } catch {
+        return {};
+    }
+};
+
+/**
+ * Add or update a single scaffold entry in the paper's scaffolds file.
+ * Stored as JSON to avoid markdown parsing ambiguity.
+ * @param {string} paperStoragePath
+ * @param {string} questionId   e.g. "q_5"
+ * @param {string} scaffold     The scaffold text
+ */
+export const saveScaffoldToStorage = async (paperStoragePath, questionId, scaffold) => {
+    const scaffoldsPath = getScaffoldsPath(paperStoragePath);
+
+    // Load existing JSON (empty object if not found)
+    let existing = {};
+    try {
+        const raw = await fetchPaperContent(scaffoldsPath);
+        existing = JSON.parse(raw);
+    } catch {
+        // File doesn't exist yet — that's fine
+    }
+
+    // Patch the entry and re-serialise as JSON
+    existing[questionId] = scaffold;
+
+    const blob = new Blob([JSON.stringify(existing, null, 2)], { type: 'application/json' });
+    const { error } = await supabase.storage
+        .from('documents')
+        .upload(scaffoldsPath, blob, { upsert: true });
+
+    if (error) throw new Error(`Failed to save scaffold: ${error.message}`);
+};
+

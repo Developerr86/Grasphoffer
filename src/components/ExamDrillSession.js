@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import MermaidDiagram from './MermaidDiagram';
+import ScaffoldDisplay from './ScaffoldDisplay';
 import { useAuth } from '../context/AuthContext';
 import {
   fetchPaperContent,
@@ -10,8 +12,36 @@ import {
   saveAnswersToStorage,
   loadAnswersFromStorage,
   checkIfAnswersExist,
+  generateMemoryScaffold,
+  loadScaffoldsFromStorage,
+  saveScaffoldToStorage,
 } from '../lib/examDrillService';
 import './ExamDrillSession.css';
+
+// ─── Shared ReactMarkdown components (mermaid code blocks → MermaidDiagram) ──
+const markdownComponents = {
+  code({ node, inline, className, children, ...props }) {
+    // Gate on className (language-xxx) to distinguish fenced blocks from inline code.
+    // Do NOT rely on the `inline` prop alone — react-markdown doesn't always pass it
+    // reliably, which caused <pre> to be nested inside <p> (invalid HTML).
+    const language = (className || '').replace('language-', '').toLowerCase();
+    const isFencedBlock = !!className && className.startsWith('language-');
+
+    if (isFencedBlock && language === 'mermaid') {
+      return <MermaidDiagram code={String(children).trim()} />;
+    }
+    if (isFencedBlock) {
+      // Use <div> wrapper — avoids the <pre>-inside-<p> hydration error
+      return (
+        <div className="answer-code-block">
+          <code className={className} {...props}>{children}</code>
+        </div>
+      );
+    }
+    // Inline code
+    return <code className={className} {...props}>{children}</code>;
+  },
+};
 
 // ─── Phase constants ─────────────────────────────────────────────────────────
 const PHASE = {
@@ -26,18 +56,34 @@ const PHASE = {
 };
 
 // ─── Individual question card ────────────────────────────────────────────────
-const QuestionCard = ({ question, index, isGenerating }) => {
+const QuestionCard = ({ question, index, isGenerating, scaffold, onGenerateScaffold }) => {
   const [open, setOpen] = useState(false);
+  const [scaffoldOpen, setScaffoldOpen] = useState(false);
+  const [scaffoldLoading, setScaffoldLoading] = useState(false);
+  const [scaffoldError, setScaffoldError] = useState('');
   const answerRef = useRef(null);
   const hasAnswer = question.answer && question.answer.trim().length > 0;
-  // Auto-open as soon as the answer arrives (only once)
+  const hasScaffold = !!scaffold && scaffold.trim().length > 0;
   const prevHasAnswer = useRef(false);
+
   useEffect(() => {
-    if (hasAnswer && !prevHasAnswer.current) {
-      prevHasAnswer.current = true;
-      // Don't auto-open — let user choose — but mark card as ready
-    }
+    if (hasAnswer && !prevHasAnswer.current) prevHasAnswer.current = true;
   }, [hasAnswer]);
+
+  const handleScaffold = async () => {
+    if (hasScaffold) { setScaffoldOpen((o) => !o); return; }
+    setScaffoldLoading(true);
+    setScaffoldError('');
+    try {
+      await onGenerateScaffold(question.id, question.text, question.answer);
+      setScaffoldOpen(true);
+    } catch (err) {
+      console.error('Scaffold generation failed:', err);
+      setScaffoldError(err?.message || 'Generation failed — please try again.');
+    } finally {
+      setScaffoldLoading(false);
+    }
+  };
 
   return (
     <div className={`question-card ${question.type} ${!hasAnswer && isGenerating ? 'pending' : ''} ${hasAnswer ? 'answered' : ''}`}>
@@ -48,27 +94,20 @@ const QuestionCard = ({ question, index, isGenerating }) => {
           {question.type === 'mcq' ? 'MCQ' : 'Long Form'}
         </span>
         {!hasAnswer && isGenerating && (
-          <span className="generating-pill">
-            <span className="generating-dot" />
-            Generating…
-          </span>
+          <span className="generating-pill"><span className="generating-dot" />Generating…</span>
         )}
-        {hasAnswer && (
-          <span className="ready-pill">✓ Ready</span>
-        )}
+        {hasAnswer && <span className="ready-pill">✓ Ready</span>}
       </div>
 
       {/* Question text */}
       <div className="question-text">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{question.text}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{question.text}</ReactMarkdown>
       </div>
 
       {/* MCQ options */}
       {question.type === 'mcq' && question.options && question.options.length > 0 && (
         <div className="mcq-options">
-          {question.options.map((opt, i) => (
-            <div key={i} className="mcq-option">{opt}</div>
-          ))}
+          {question.options.map((opt, i) => <div key={i} className="mcq-option">{opt}</div>)}
         </div>
       )}
 
@@ -76,28 +115,19 @@ const QuestionCard = ({ question, index, isGenerating }) => {
       <div className={`answer-accordion ${open ? 'open' : ''}`}>
         {hasAnswer ? (
           <>
-            <button
-              className="answer-toggle"
-              onClick={() => setOpen((o) => !o)}
-              aria-expanded={open}
-            >
+            <button className="answer-toggle" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
               <span>{open ? '▲ Hide Answer' : '▼ Show Answer'}</span>
             </button>
             <div
               className="answer-body-wrapper"
-              style={{
-                maxHeight: open
-                  ? (answerRef.current ? answerRef.current.scrollHeight + 'px' : '2000px')
-                  : '0px',
-              }}
+              style={{ maxHeight: open ? (answerRef.current ? answerRef.current.scrollHeight + 'px' : '2000px') : '0px' }}
             >
               <div className="answer-body" ref={answerRef}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{question.answer}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{question.answer}</ReactMarkdown>
               </div>
             </div>
           </>
         ) : (
-          /* Skeleton shimmer while answer is being generated */
           <div className="answer-skeleton">
             <div className="skeleton-line wide" />
             <div className="skeleton-line medium" />
@@ -105,9 +135,34 @@ const QuestionCard = ({ question, index, isGenerating }) => {
           </div>
         )}
       </div>
+
+      {/* Memory Scaffold — long-form answered questions only */}
+      {hasAnswer && question.type !== 'mcq' && (
+        <div className="scaffold-section">
+          <button
+            className={`scaffold-btn ${hasScaffold ? 'scaffold-btn--saved' : ''} ${scaffoldLoading ? 'scaffold-btn--loading' : ''}`}
+            onClick={handleScaffold}
+            disabled={scaffoldLoading}
+          >
+            {scaffoldLoading
+              ? <><span className="scaffold-btn-spinner" /> Generating scaffold…</>
+              : hasScaffold
+                ? <>{scaffoldOpen ? '▲' : '▼'} Keyword Memory Scaffold</>
+                : <span className="scaffold-btn-inner">⧗ Keyword Memory Scaffold</span>
+            }
+          </button>
+          {scaffoldError && (
+            <span className="scaffold-error-pill">⚠ {scaffoldError}</span>
+          )}
+          {hasScaffold && scaffoldOpen && (
+            <div className="scaffold-panel"><ScaffoldDisplay scaffold={scaffold} /></div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
+
 
 // ─── ExamDrillSession ────────────────────────────────────────────────────────
 const ExamDrillSession = ({ papers = [], onBack }) => {
@@ -118,16 +173,28 @@ const ExamDrillSession = ({ papers = [], onBack }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [paperTitle, setPaperTitle] = useState('');
   const [savedToast, setSavedToast] = useState(false);
+  // scaffolds: { [questionId]: scaffoldText }
+  const [scaffolds, setScaffolds] = useState({});
   const hasStarted = useRef(false);
 
   const paper = papers && papers.length > 0 ? papers[0] : null;
 
   // ── Helper: update a single question by id ──────────────────────────────
   const patchQuestion = useCallback((id, patch) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, ...patch } : q))
-    );
+    setQuestions((prev) => prev.map((q) => (q.id === id ? { ...q, ...patch } : q)));
   }, []);
+
+  // ── Generate + persist a memory scaffold for one question ──────────────
+  const handleGenerateScaffold = useCallback(async (questionId, questionText, answerText) => {
+    const text = await generateMemoryScaffold(questionText, answerText);
+    setScaffolds((prev) => ({ ...prev, [questionId]: text }));
+    // Persist to storage (fire-and-forget)
+    if (paper) {
+      saveScaffoldToStorage(paper.storagePath, questionId, text).catch((e) =>
+        console.warn('Scaffold save failed:', e)
+      );
+    }
+  }, [paper]);
 
   // ── Main processing pipeline ────────────────────────────────────────────
   const runDrill = useCallback(async () => {
@@ -141,6 +208,8 @@ const ExamDrillSession = ({ papers = [], onBack }) => {
       if (paper._savedQuestions && paper._savedQuestions.length > 0) {
         setQuestions(paper._savedQuestions);
         setPhase(PHASE.REVISIT);
+        // Load any previously generated scaffolds
+        loadScaffoldsFromStorage(storagePath).then(setScaffolds).catch(() => { });
         return;
       }
 
@@ -150,6 +219,8 @@ const ExamDrillSession = ({ papers = [], onBack }) => {
         setPhase(PHASE.FETCHING);
         const saved = await loadAnswersFromStorage(storagePath);
         setQuestions(saved);
+        // Load any previously generated scaffolds
+        loadScaffoldsFromStorage(storagePath).then(setScaffolds).catch(() => { });
         setPhase(PHASE.REVISIT);
         return;
       }
@@ -366,6 +437,8 @@ const ExamDrillSession = ({ papers = [], onBack }) => {
                 question={q}
                 index={idx}
                 isGenerating={isGenerating}
+                scaffold={scaffolds[q.id] || ''}
+                onGenerateScaffold={handleGenerateScaffold}
               />
             ))}
           </div>

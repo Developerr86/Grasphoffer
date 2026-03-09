@@ -729,6 +729,98 @@
   background: #3f3f46;
 }
 
+/* ── Mermaid Diagrams ── */
+.mermaid-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f8fc;
+  border: 2px solid #c4b5fd;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.dark .mermaid-container {
+  background: #1e1b2e;
+  border-color: #6d28d9;
+}
+
+.mermaid-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: #7c3aed;
+  background: #f5f3ff;
+  border: 1.5px dashed #c4b5fd;
+  border-radius: 10px;
+  margin: 0.75rem 0;
+}
+
+.mermaid-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid #ddd6fe;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.mermaid-error {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 10px;
+}
+
+.dark .mermaid-error {
+  background: #2d1c1c;
+  border-color: #b91c1c;
+}
+
+.mermaid-error-label {
+  font-size: 0.8rem;
+  color: #b91c1c;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.mermaid-raw {
+  background: #1e1e2e;
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  color: #cdd6f4;
+}
+
+/* Normal fenced code blocks (non-mermaid) */
+.answer-code-block {
+  background: #1e1e2e;
+  border: 2px solid #383862;
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.answer-code-block code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #cdd6f4;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.88rem;
+}
+
 
 .no-answer {
   color: #9ca3af;
@@ -810,4 +902,240 @@
   .question-card {
     padding: 1rem;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Memory Scaffold
+═══════════════════════════════════════════════════════════ */
+
+/* ── Trigger row ── */
+.scaffold-section {
+  margin-top: 0.75rem;
+  border-top: 1.5px dashed #e4e4e7;
+  padding-top: 0.75rem;
+}
+
+.dark .scaffold-section {
+  border-top-color: #3f3f46;
+}
+
+/* ── Scaffold trigger button ── */
+.scaffold-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6d28d9;
+  background: #f5f3ff;
+  border: 2px solid #c4b5fd;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.scaffold-btn:hover:not(:disabled) {
+  background: #ede9fe;
+  border-color: #8b5cf6;
+  transform: translateY(-1px);
+}
+
+.scaffold-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* When a scaffold has already been generated — teal accent */
+.scaffold-btn.scaffold-btn--saved {
+  color: #0d9488;
+  background: #f0fdfa;
+  border-color: #5eead4;
+}
+
+.scaffold-btn.scaffold-btn--saved:hover:not(:disabled) {
+  background: #ccfbf1;
+  border-color: #14b8a6;
+}
+
+.dark .scaffold-btn {
+  color: #a78bfa;
+  background: #1e1b2e;
+  border-color: #6d28d9;
+}
+
+.dark .scaffold-btn.scaffold-btn--saved {
+  color: #2dd4bf;
+  background: #042f2e;
+  border-color: #0d9488;
+}
+
+/* Loading state */
+.scaffold-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.scaffold-btn-spinner {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #c4b5fd;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Error pill shown when scaffold generation fails */
+.scaffold-error-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
+.dark .scaffold-error-pill {
+  color: #fca5a5;
+  background: #2d1c1c;
+  border-color: #b91c1c;
+}
+
+/* ── Scaffold panel ── */
+.scaffold-panel {
+  margin-top: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #faf5ff 0%, #f0f9ff 100%);
+  border: 2px solid #c4b5fd;
+  border-radius: 14px;
+  animation: cardIn 0.25s ease both;
+}
+
+.dark .scaffold-panel {
+  background: linear-gradient(135deg, #1e1b2e 0%, #0f172a 100%);
+  border-color: #6d28d9;
+}
+
+/* ── ScaffoldDisplay ── */
+
+/* Section title line (no arrows, not indented) */
+.scaffold-section-title {
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  color: #4c1d95;
+  margin: 0.75rem 0 0.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #ddd6fe;
+}
+
+.scaffold-section-title:first-child {
+  margin-top: 0;
+}
+
+.dark .scaffold-section-title {
+  color: #c4b5fd;
+  border-bottom-color: #4c1d95;
+}
+
+/* Sub-section label within scaffold (not the main title) */
+.scaffold-section-title--sub {
+  font-size: 0.82rem;
+  margin: 0.55rem 0 0.25rem;
+  border-bottom: 1px dashed #ddd6fe;
+}
+
+.dark .scaffold-section-title--sub {
+  border-bottom-color: #4c1d95;
+}
+
+/* Keyword chain row */
+.scaffold-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.15rem;
+  margin: 0.35rem 0;
+}
+
+/* Indented sub-chain */
+.scaffold-chain--indented {
+  margin-left: 1.5rem;
+}
+
+.scaffold-indent-arrow {
+  font-size: 1rem;
+  color: #8b5cf6;
+  margin-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Arrow connector between keywords */
+.scaffold-arrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8b5cf6;
+  padding: 0 0.05rem;
+  flex-shrink: 0;
+}
+
+.dark .scaffold-arrow {
+  color: #a78bfa;
+}
+
+/* Keyword node — groups one or more sub-keywords joined by + */
+.scaffold-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex-wrap: wrap;
+}
+
+/* Individual keyword pill */
+.scaffold-keyword {
+  display: inline-block;
+  background: #ede9fe;
+  color: #4c1d95;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background 0.12s ease, transform 0.1s ease;
+}
+
+.scaffold-keyword:hover {
+  background: #ddd6fe;
+  transform: translateY(-1px);
+}
+
+.dark .scaffold-keyword {
+  background: #2e1065;
+  color: #e9d5ff;
+  border-color: #7c3aed;
+}
+
+.dark .scaffold-keyword:hover {
+  background: #3b0764;
+}
+
+/* Plus sign between parallel keywords */
+.scaffold-plus {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #7c3aed;
+  padding: 0 0.1rem;
+}
+
+.dark .scaffold-plus {
+  color: #c4b5fd;
 }
